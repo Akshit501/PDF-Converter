@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #EEF0F2;
+  --surface: #FFFFFF;
+  --ink: #13161C;
+  --ink-soft: #4A505C;
+  --ink-faint: #8A909B;
+  --accent: #FF7A1A;
+  --accent-dark: #C85400;
+  --accent-tint: #FFEBD9;
+  --warn: #E8B400;
+  --warn-tint: #FFF6D6;
+  --good: #2FA84F;
+  --good-dark: #1C7A38;
+  --good-tint: #E3F6E7;
+  --line: #D7DBE0;
+  --font-display: var(--font-display), 'Space Grotesk', sans-serif;
+  --font-body: var(--font-body), 'Inter', sans-serif;
+  --font-mono: var(--font-mono), 'IBM Plex Mono', monospace;
+}
+
+body {
+  background:
+    radial-gradient(720px 480px at 6% -8%, #FFF3C4 0%, rgba(255,243,196,0) 62%),
+    radial-gradient(680px 460px at 96% 6%, #FFDCB8 0%, rgba(255,220,184,0) 60%),
+    radial-gradient(760px 520px at 50% 108%, #D8F2DE 0%, rgba(216,242,222,0) 60%),
+    var(--paper);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-custom {
+  font-family: var(--font-mono);
+}
+
+.features-bg {
+  background:
+    radial-gradient(420px 260px at 8% 0%, rgba(255,122,26,0.18) 0%, rgba(255,122,26,0) 70%),
+    radial-gradient(420px 300px at 100% 100%, rgba(47,168,79,0.18) 0%, rgba(47,168,79,0) 70%),
+    var(--ink);
+}
+
+/* 3D Card Flip Animation */
+@keyframes flip {
+  0%, 38% { transform: rotateY(0deg); }
+  50%, 88% { transform: rotateY(180deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes flipOut {
+  0%, 38% { transform: rotateY(180deg); }
+  50%, 88% { transform: rotateY(360deg); }
+  100% { transform: rotateY(540deg); }
+}
+
+.animate-flip {
+  animation: flip 6s ease-in-out infinite;
+}
+
+.animate-flip-out {
+  animation: flipOut 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-flip, .animate-flip-out {
+    animation: none;
+  }
+}
