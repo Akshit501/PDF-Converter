@@ -2,10 +2,12 @@
 
 import React, { useState } from "react";
 import FileUploader from "@/src/components/FileUploader";
+import PdfDarkModeTool from "@/src/components/PdfDarkModeTool";
 import { UploadedFile } from "@/src/types";
 
 export default function Home() {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [activeTab, setActiveTab] = useState<"uploader" | "darkmode">("uploader");
 
   return (
     <div className="min-h-screen text-[#13161C] flex flex-col font-sans">
@@ -24,10 +26,24 @@ export default function Home() {
           </div>
 
           <div className="hidden md:flex items-center gap-9 text-sm text-[#4A505C] font-medium">
-            <a href="#convert" className="hover:text-[#13161C] transition-colors">Convert</a>
+            <button
+              onClick={() => setActiveTab("uploader")}
+              className={`hover:text-[#13161C] transition-colors ${
+                activeTab === "uploader" ? "text-[#FF7A1A] font-bold" : ""
+              }`}
+            >
+              Convert
+            </button>
+            <button
+              onClick={() => setActiveTab("darkmode")}
+              className={`hover:text-[#13161C] transition-colors ${
+                activeTab === "darkmode" ? "text-[#FF7A1A] font-bold" : ""
+              }`}
+            >
+              PDF Dark Mode
+            </button>
             <a href="#formats" className="hover:text-[#13161C] transition-colors">Formats</a>
             <a href="#how-it-works" className="hover:text-[#13161C] transition-colors">How it works</a>
-            <a href="#pricing" className="hover:text-[#13161C] transition-colors">Pricing</a>
           </div>
 
           <a
@@ -55,23 +71,32 @@ export default function Home() {
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg leading-relaxed text-[#4A505C] max-w-md mb-8">
-              Drop a PDF, pick a format, get it back in seconds — Word, Excel, PowerPoint, JPG, or the reverse. No watermarks, no waiting rooms.
+              Drop a PDF, pick a format or invert to Dark Mode in seconds. No watermarks, no waiting rooms.
             </p>
 
             {/* Hero CTA */}
             <div className="flex flex-wrap gap-3.5 mb-9">
-              <a
-                href="#dropzone"
-                className="inline-flex items-center justify-center px-5 py-3 rounded-lg text-sm font-semibold bg-[#FF7A1A] text-white hover:bg-[#C85400] transition-colors"
+              <button
+                onClick={() => setActiveTab("uploader")}
+                className={`inline-flex items-center justify-center px-5 py-3 rounded-lg text-sm font-semibold transition-colors ${
+                  activeTab === "uploader"
+                    ? "bg-[#FF7A1A] text-white hover:bg-[#C85400]"
+                    : "border border-[#D7DBE0] text-[#13161C] hover:bg-white"
+                }`}
               >
                 Convert a file
-              </a>
-              <a
-                href="#formats"
-                className="inline-flex items-center justify-center px-5 py-3 rounded-lg text-sm font-semibold border border-[#D7DBE0] text-[#13161C] hover:bg-white transition-colors"
+              </button>
+
+              <button
+                onClick={() => setActiveTab("darkmode")}
+                className={`inline-flex items-center justify-center px-5 py-3 rounded-lg text-sm font-semibold transition-colors ${
+                  activeTab === "darkmode"
+                    ? "bg-[#FF7A1A] text-white hover:bg-[#C85400]"
+                    : "border border-[#D7DBE0] text-[#13161C] hover:bg-white"
+                }`}
               >
-                See all formats
-              </a>
+                🌙 PDF Dark Mode
+              </button>
             </div>
 
             {/* Trust Row */}
@@ -113,13 +138,34 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Embedded Dropzone Component */}
-            <FileUploader
-              files={uploadedFiles}
-              onFilesChange={setUploadedFiles}
-              maxSizeMB={100}
-            />
+            {/* Switch between Uploader and Dark Mode Engine */}
+            {activeTab === "uploader" ? (
+              <FileUploader
+                files={uploadedFiles}
+                onFilesChange={setUploadedFiles}
+                maxSizeMB={100}
+              />
+            ) : (
+              <PdfDarkModeTool selectedFile={uploadedFiles[0]?.file} />
+            )}
           </div>
+        </section>
+
+        {/* Dedicated PDF Dark Mode Engine Section */}
+        <section id="darkmode-section" className="py-12 border-t border-[#D7DBE0]">
+          <div className="text-center max-w-lg mx-auto mb-8 space-y-2">
+            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#FFEBD9] text-[#C85400] text-xs font-mono-custom font-bold">
+              <span>Task 2: Light-to-Dark Converter Engine</span>
+            </div>
+            <h2 className="font-display font-bold text-3xl text-[#13161C]">
+              PDF Light-to-Dark Studio
+            </h2>
+            <p className="text-xs text-[#4A505C]">
+              Invert PDF backgrounds to OLED Black, Dark Charcoal, or Midnight Blue without inverting colors in photos.
+            </p>
+          </div>
+
+          <PdfDarkModeTool selectedFile={uploadedFiles[0]?.file} />
         </section>
 
         {/* FORMAT STRIP */}
@@ -201,7 +247,7 @@ export default function Home() {
         </section>
       </div>
 
-      {/* FEATURES (Dark block with warm radial glows) */}
+      {/* FEATURES */}
       <section className="features-bg text-white rounded-3xl p-10 md:p-16 mx-5 md:mx-10 my-6">
         <div className="max-w-[1180px] mx-auto space-y-12">
           <div className="max-w-[520px]">
