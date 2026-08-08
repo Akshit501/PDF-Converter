@@ -1,75 +1,88 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #EEF0F2;
-  --surface: #FFFFFF;
-  --ink: #13161C;
-  --ink-soft: #4A505C;
-  --ink-faint: #8A909B;
-  --accent: #FF7A1A;
-  --accent-dark: #C85400;
-  --accent-tint: #FFEBD9;
-  --warn: #E8B400;
-  --warn-tint: #FFF6D6;
-  --good: #2FA84F;
-  --good-dark: #1C7A38;
-  --good-tint: #E3F6E7;
-  --line: #D7DBE0;
-  --font-display: var(--font-display), 'Space Grotesk', sans-serif;
-  --font-body: var(--font-body), 'Inter', sans-serif;
-  --font-mono: var(--font-mono), 'IBM Plex Mono', monospace;
+  --ink: #0B0B14;
+  --paper: #F5F2FF;
+  --violet: #6E3CF6;
+  --violet-deep: #4B1FCB;
+  --lime: #C6FF3D;
+  --pink: #FF3D9A;
+  --card: #FFFFFF;
+  --border: 3px solid var(--ink);
+  --shadow-sm: 4px 4px 0 var(--ink);
+  --shadow-md: 8px 8px 0 var(--ink);
+  --shadow-lg: 12px 12px 0 var(--ink);
 }
 
 body {
-  background:
-    radial-gradient(720px 480px at 6% -8%, #FFF3C4 0%, rgba(255,243,196,0) 62%),
-    radial-gradient(680px 460px at 96% 6%, #FFDCB8 0%, rgba(255,220,184,0) 60%),
-    radial-gradient(760px 520px at 50% 108%, #D8F2DE 0%, rgba(216,242,222,0) 60%),
-    var(--paper);
-  background-attachment: fixed;
+  margin: 0;
+  background-color: var(--paper);
   color: var(--ink);
-  font-family: var(--font-body);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  background-image: radial-gradient(circle at 1px 1px, rgba(11, 11, 20, 0.08) 1px, transparent 0);
+  background-size: 26px 26px;
   -webkit-font-smoothing: antialiased;
 }
 
-.font-display {
-  font-family: var(--font-display);
+h1, h2, h3, .font-display {
+  font-family: var(--font-space-grotesk), sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .font-mono-custom {
-  font-family: var(--font-mono);
+  font-family: var(--font-jetbrains-mono), monospace;
 }
 
-.features-bg {
-  background:
-    radial-gradient(420px 260px at 8% 0%, rgba(255,122,26,0.18) 0%, rgba(255,122,26,0) 70%),
-    radial-gradient(420px 300px at 100% 100%, rgba(47,168,79,0.18) 0%, rgba(47,168,79,0) 70%),
-    var(--ink);
+/* Neo-Brutalist Buttons */
+.btn-brutal-solid {
+  background: var(--ink);
+  color: var(--lime);
+  border: var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn-brutal-solid:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
 }
 
-/* 3D Card Flip Animation */
-@keyframes flip {
-  0%, 38% { transform: rotateY(0deg); }
-  50%, 88% { transform: rotateY(180deg); }
-  100% { transform: rotateY(360deg); }
+.btn-brutal-purple {
+  background: var(--violet);
+  color: #ffffff;
+  border: var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn-brutal-purple:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 11px 11px 0 var(--ink);
 }
 
-@keyframes flipOut {
-  0%, 38% { transform: rotateY(180deg); }
-  50%, 88% { transform: rotateY(360deg); }
-  100% { transform: rotateY(540deg); }
+/* Stroked Step Numbers */
+.stroked-num {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  color: var(--lime);
+  -webkit-text-stroke: 2px var(--ink);
 }
 
-.animate-flip {
-  animation: flip 6s ease-in-out infinite;
-}
-
-.animate-flip-out {
-  animation: flipOut 6s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-flip, .animate-flip-out {
-    animation: none;
+/* Scrolling Marquee */
+@keyframes scrollMarquee {
+  from {
+    transform: translateX(0);
   }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  display: flex;
+  white-space: nowrap;
+  animation: scrollMarquee 22s linear infinite;
 }

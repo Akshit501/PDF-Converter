@@ -3,342 +3,297 @@
 import React, { useState } from "react";
 import FileUploader from "@/src/components/FileUploader";
 import PdfDarkModeTool from "@/src/components/PdfDarkModeTool";
+import PdfOperationsTool from "@/src/components/PdfOperationsTool";
+import PdfCompressionTool from "@/src/components/PdfCompressionTool";
+import PdfToImagesTool from "@/src/components/PdfToImagesTool";
+import ImagesToPdfTool from "@/src/components/ImagesToPdfTool";
+import PdfPageManagerTool from "@/src/components/PdfPageManagerTool";
+import PdfWatermarkTool from "@/src/components/PdfWatermarkTool";
+import PdfTextExtractorTool from "@/src/components/PdfTextExtractorTool";
 import { UploadedFile } from "@/src/types";
+
+type AppTab =
+  | "uploader"
+  | "darkmode"
+  | "operations"
+  | "compress"
+  | "pdfToImages"
+  | "imagesToPdf"
+  | "pageManager"
+  | "watermark"
+  | "extractText";
 
 export default function Home() {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-  const [activeTab, setActiveTab] = useState<"uploader" | "darkmode">("uploader");
+  const [activeTab, setActiveTab] = useState<AppTab>("darkmode");
+  const [opMode, setOpMode] = useState<"merge" | "split">("merge");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [isToolsOpen, setIsToolsOpen] = useState(false);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
+  const getActiveToolName = () => {
+    if (activeTab === "darkmode") return "dark mode converter";
+    if (activeTab === "compress") return "compress PDF";
+    if (activeTab === "pdfToImages") return "pdf → images";
+    if (activeTab === "imagesToPdf") return "images → PDF";
+    if (activeTab === "pageManager") return "delete / reorder pages";
+    if (activeTab === "watermark") return "watermark & page numbers";
+    if (activeTab === "extractText") return "extract PDF text";
+    if (activeTab === "operations" && opMode === "merge") return "merge PDFs";
+    if (activeTab === "operations" && opMode === "split") return "split / rotate";
+    return "convert file";
+  };
 
   return (
-    <div className="min-h-screen text-[#13161C] flex flex-col font-sans">
-      <div className="max-w-[1180px] w-full mx-auto px-5 md:px-10">
-        {/* NAV */}
-        <nav className="flex items-center justify-between py-6">
-          <div className="flex items-center gap-2.5 font-display font-semibold text-xl tracking-tight text-[#13161C]">
-            <span className="w-[26px] h-[26px] relative block">
-              <svg viewBox="0 0 26 26" className="w-full h-full">
-                <path d="M4 2h13l5 5v17H4z" fill="none" stroke="#13161C" strokeWidth="1.6" />
-                <path d="M17 2v5h5" fill="none" stroke="#13161C" strokeWidth="1.6" />
-                <path d="M17 2v5h5" fill="#FF7A1A" fillOpacity="0.25" />
-              </svg>
-            </span>
-            Foldr
-          </div>
-
-          <div className="hidden md:flex items-center gap-9 text-sm text-[#4A505C] font-medium">
-            <button
-              onClick={() => setActiveTab("uploader")}
-              className={`hover:text-[#13161C] transition-colors ${
-                activeTab === "uploader" ? "text-[#FF7A1A] font-bold" : ""
-              }`}
-            >
-              Convert
-            </button>
-            <button
-              onClick={() => setActiveTab("darkmode")}
-              className={`hover:text-[#13161C] transition-colors ${
-                activeTab === "darkmode" ? "text-[#FF7A1A] font-bold" : ""
-              }`}
-            >
-              PDF Dark Mode
-            </button>
-            <a href="#formats" className="hover:text-[#13161C] transition-colors">Formats</a>
-            <a href="#how-it-works" className="hover:text-[#13161C] transition-colors">How it works</a>
-          </div>
-
-          <a
-            href="#converter"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold bg-[#13161C] text-white hover:bg-black transition-colors"
+    <div className="min-h-screen bg-[#F5F2FF] text-[#0B0B14] flex flex-col font-sans">
+      {/* 1. NAVBAR */}
+      <nav className="sticky top-0 z-50 bg-[#F5F2FF] border-b-[3px] border-[#0B0B14]">
+        <div className="max-w-[1180px] mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
+          <div
+            onClick={() => {
+              setActiveTab("darkmode");
+              setIsToolsOpen(false);
+            }}
+            className="flex items-center gap-2.5 font-display font-bold text-2xl text-[#0B0B14] cursor-pointer"
           >
-            Open converter
-          </a>
-        </nav>
+            <span className="w-8.5 h-8.5 bg-[#0B0B14] text-[#C6FF3D] flex items-center justify-center font-bold text-lg rounded-lg -rotate-6 font-display">
+              /f
+            </span>
+            flip.
+          </div>
 
-        {/* HERO */}
-        <section id="converter" className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center py-12 lg:py-24">
+          {/* Tools Dropdown Button */}
+          <div className="relative">
+            <button
+              onClick={() => setIsToolsOpen(!isToolsOpen)}
+              className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white border-[3px] border-[#0B0B14] text-xs sm:text-sm font-display font-bold text-[#0B0B14] shadow-[4px_4px_0_#0B0B14] hover:bg-[#C6FF3D] transition-colors"
+            >
+              <span>tools</span>
+              <span className="text-xs font-mono-custom">
+                {isToolsOpen ? "▲" : "▼"}
+              </span>
+            </button>
+
+            {/* Dropdown Menu */}
+            {isToolsOpen && (
+              <div
+                onClick={() => setIsToolsOpen(false)}
+                className="absolute right-0 mt-2 w-60 sm:w-68 bg-white border-[3px] border-[#0B0B14] rounded-2xl p-2 shadow-[8px_8px_0_#0B0B14] z-50 space-y-1 max-h-96 overflow-y-auto"
+              >
+                {[
+                  { id: "darkmode", label: "dark mode converter", emoji: "🌙", action: () => setActiveTab("darkmode") },
+                  { id: "compress", label: "compress PDF", emoji: "📉", action: () => setActiveTab("compress") },
+                  { id: "pdfToImages", label: "pdf → images (.zip)", emoji: "🖼️", action: () => setActiveTab("pdfToImages") },
+                  { id: "imagesToPdf", label: "images → PDF", emoji: "🖼️", action: () => setActiveTab("imagesToPdf") },
+                  { id: "pageManager", label: "delete / reorder pages", emoji: "📋", action: () => setActiveTab("pageManager") },
+                  { id: "watermark", label: "watermark & page numbers", emoji: "✍️", action: () => setActiveTab("watermark") },
+                  { id: "extractText", label: "extract PDF text", emoji: "📝", action: () => setActiveTab("extractText") },
+                  {
+                    id: "merge",
+                    label: "merge PDFs",
+                    emoji: "🥞",
+                    action: () => {
+                      setActiveTab("operations");
+                      setOpMode("merge");
+                    },
+                  },
+                  {
+                    id: "split",
+                    label: "split / rotate",
+                    emoji: "✂️",
+                    action: () => {
+                      setActiveTab("operations");
+                      setOpMode("split");
+                    },
+                  },
+                  { id: "uploader", label: "convert file", emoji: "📄", action: () => setActiveTab("uploader") },
+                ].map((item) => {
+                  const isActive =
+                    (item.id === "darkmode" && activeTab === "darkmode") ||
+                    (item.id === "compress" && activeTab === "compress") ||
+                    (item.id === "pdfToImages" && activeTab === "pdfToImages") ||
+                    (item.id === "imagesToPdf" && activeTab === "imagesToPdf") ||
+                    (item.id === "pageManager" && activeTab === "pageManager") ||
+                    (item.id === "watermark" && activeTab === "watermark") ||
+                    (item.id === "extractText" && activeTab === "extractText") ||
+                    (item.id === "merge" && activeTab === "operations" && opMode === "merge") ||
+                    (item.id === "split" && activeTab === "operations" && opMode === "split") ||
+                    (item.id === "uploader" && activeTab === "uploader");
+
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        item.action();
+                        setIsToolsOpen(false);
+                        const ws = document.getElementById("workspace");
+                        ws?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl border-2 transition-all duration-150 text-left font-display font-bold text-xs sm:text-sm ${
+                        isActive
+                          ? "bg-[#C6FF3D] border-[#0B0B14] shadow-xs text-[#0B0B14]"
+                          : "border-transparent hover:bg-[#F5F2FF] text-[#0B0B14]"
+                      }`}
+                    >
+                      <span className="w-6 h-6 rounded-md bg-[#0B0B14] text-white flex items-center justify-center text-xs">
+                        {item.emoji}
+                      </span>
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      {/* 2. HERO & WORKSPACE */}
+      <header className="py-12 md:py-16 relative overflow-hidden">
+        <div className="max-w-[1180px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center">
           <div>
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 font-mono-custom text-xs tracking-wider text-[#1C7A38] bg-[#E3F6E7] px-3 py-1.5 rounded-full mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2FA84F] inline-block" />
-              No signup · files deleted after 1 hour
+            <div className="inline-flex items-center gap-2 bg-[#C6FF3D] border-[3px] border-[#0B0B14] rounded-full px-3.5 py-1.5 font-mono-custom text-xs font-semibold -rotate-2 mb-6 shadow-xs">
+              ✦ 100% In-Browser PDF Studio
             </div>
 
-            {/* H1 */}
-            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-[56px] leading-[1.05] tracking-tight mb-5 text-[#13161C]">
-              Turn any PDF into the file you<br className="hidden sm:block" /> actually{" "}
-              <span className="text-[#FF7A1A]">need.</span>
+            {/* Title */}
+            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-[60px] leading-[0.98] tracking-tight mb-6 text-[#0B0B14]">
+              turn any file into a{" "}
+              <span className="bg-[#6E3CF6] text-white px-2.5 py-0.5 inline-block -rotate-1 rounded-md">
+                PDF
+              </span>{" "}
+              in seconds.
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg leading-relaxed text-[#4A505C] max-w-md mb-8">
-              Drop a PDF, pick a format or invert to Dark Mode in seconds. No watermarks, no waiting rooms.
+            <p className="text-lg leading-relaxed text-[#33314a] max-w-md mb-8">
+              Convert images to PDF, delete/reorder pages, add watermarks, extract plain text streams, or invert to Dark Mode — all client-side.
             </p>
 
-            {/* Hero CTA */}
-            <div className="flex flex-wrap gap-3.5 mb-9">
-              <button
-                onClick={() => setActiveTab("uploader")}
-                className={`inline-flex items-center justify-center px-5 py-3 rounded-lg text-sm font-semibold transition-colors ${
-                  activeTab === "uploader"
-                    ? "bg-[#FF7A1A] text-white hover:bg-[#C85400]"
-                    : "border border-[#D7DBE0] text-[#13161C] hover:bg-white"
-                }`}
-              >
-                Convert a file
-              </button>
-
-              <button
-                onClick={() => setActiveTab("darkmode")}
-                className={`inline-flex items-center justify-center px-5 py-3 rounded-lg text-sm font-semibold transition-colors ${
-                  activeTab === "darkmode"
-                    ? "bg-[#FF7A1A] text-white hover:bg-[#C85400]"
-                    : "border border-[#D7DBE0] text-[#13161C] hover:bg-white"
-                }`}
-              >
-                🌙 PDF Dark Mode
-              </button>
-            </div>
-
-            {/* Trust Row */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-[#8A909B] font-mono-custom">
-              <span>2.4M files converted</span>
-              <span>·</span>
-              <span>256-bit encryption</span>
-              <span>·</span>
-              <span>Avg. 8s per file</span>
+            {/* Trust Strip */}
+            <div className="flex flex-wrap gap-4 items-center text-xs font-semibold text-[#4a475f]">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.75 h-1.75 bg-[#6E3CF6] rounded-full inline-block" />
+                100% Client-Side Engine
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.75 h-1.75 bg-[#6E3CF6] rounded-full inline-block" />
+                Zero Server Uploads
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.75 h-1.75 bg-[#6E3CF6] rounded-full inline-block" />
+                Instant Processing
+              </span>
             </div>
           </div>
 
-          {/* Hero Visual Container */}
-          <div id="dropzone" className="bg-white border border-[#D7DBE0] rounded-2xl p-6 sm:p-9 min-h-[420px] flex flex-col items-center justify-center relative shadow-sm">
-            {/* 3D Morph Stage Animation */}
-            <div className="w-[180px] h-[220px] relative perspective-[900px] mb-4">
-              <div className="absolute inset-0 rounded-r-[6px] rounded-l-none bg-white border-[1.5px] border-[#13161C] shadow-[6px_6px_0_#FFEBD9] flex flex-col items-center justify-center animate-flip backface-hidden transform-style-3d">
-                <div className="font-mono-custom font-medium text-xs px-3 py-1 rounded bg-[#FFF6D6] text-[#8A6A00] mb-2.5">
-                  .pdf
-                </div>
-                <div className="w-[70%] space-y-2">
-                  <div className="h-0.5 bg-[#D7DBE0] rounded" />
-                  <div className="h-0.5 bg-[#D7DBE0] rounded w-[80%]" />
-                  <div className="h-0.5 bg-[#D7DBE0] rounded w-[60%]" />
-                </div>
-                <div className="absolute top-0 right-0 w-0 h-0 border-t-0 border-r-[16px] border-b-[16px] border-l-0 border-t-transparent border-r-[#EEF0F2] border-b-transparent border-l-transparent" />
-              </div>
-
-              <div className="absolute inset-0 rounded-r-[6px] rounded-l-none bg-white border-[1.5px] border-[#13161C] shadow-[6px_6px_0_#FFEBD9] flex flex-col items-center justify-center animate-flip-out backface-hidden transform-style-3d">
-                <div className="font-mono-custom font-medium text-xs px-3 py-1 rounded bg-[#E3F6E7] text-[#1C7A38] mb-2.5">
-                  .docx
-                </div>
-                <div className="w-[70%] space-y-2">
-                  <div className="h-0.5 bg-[#D7DBE0] rounded" />
-                  <div className="h-0.5 bg-[#D7DBE0] rounded w-[80%]" />
-                  <div className="h-0.5 bg-[#D7DBE0] rounded w-[60%]" />
-                </div>
-                <div className="absolute top-0 right-0 w-0 h-0 border-t-0 border-r-[16px] border-b-[16px] border-l-0 border-t-transparent border-r-[#EEF0F2] border-b-transparent border-l-transparent" />
-              </div>
-            </div>
-
-            {/* Switch between Uploader and Dark Mode Engine */}
-            {activeTab === "uploader" ? (
+          {/* Main Interactive Tool Workspace */}
+          <div id="workspace" className="w-full">
+            {activeTab === "darkmode" ? (
+              <PdfDarkModeTool selectedFile={uploadedFiles[0]?.file} />
+            ) : activeTab === "compress" ? (
+              <PdfCompressionTool selectedFile={uploadedFiles[0]?.file} />
+            ) : activeTab === "pdfToImages" ? (
+              <PdfToImagesTool selectedFile={uploadedFiles[0]?.file} />
+            ) : activeTab === "imagesToPdf" ? (
+              <ImagesToPdfTool />
+            ) : activeTab === "pageManager" ? (
+              <PdfPageManagerTool />
+            ) : activeTab === "watermark" ? (
+              <PdfWatermarkTool />
+            ) : activeTab === "extractText" ? (
+              <PdfTextExtractorTool />
+            ) : activeTab === "operations" ? (
+              <PdfOperationsTool initialMode={opMode} />
+            ) : (
               <FileUploader
                 files={uploadedFiles}
                 onFilesChange={setUploadedFiles}
                 maxSizeMB={100}
               />
-            ) : (
-              <PdfDarkModeTool selectedFile={uploadedFiles[0]?.file} />
             )}
           </div>
-        </section>
+        </div>
+      </header>
 
-        {/* Dedicated PDF Dark Mode Engine Section */}
-        <section id="darkmode-section" className="py-12 border-t border-[#D7DBE0]">
-          <div className="text-center max-w-lg mx-auto mb-8 space-y-2">
-            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#FFEBD9] text-[#C85400] text-xs font-mono-custom font-bold">
-              <span>Task 2: Light-to-Dark Converter Engine</span>
-            </div>
-            <h2 className="font-display font-bold text-3xl text-[#13161C]">
-              PDF Light-to-Dark Studio
-            </h2>
-            <p className="text-xs text-[#4A505C]">
-              Invert PDF backgrounds to OLED Black, Dark Charcoal, or Midnight Blue without inverting colors in photos.
-            </p>
-          </div>
-
-          <PdfDarkModeTool selectedFile={uploadedFiles[0]?.file} />
-        </section>
-
-        {/* FORMAT STRIP */}
-        <section id="formats" className="py-2 pb-20">
-          <div className="font-mono-custom text-xs text-[#8A909B] uppercase tracking-wider mb-4">
-            Supported conversions
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { from: "pdf", to: "docx" },
-              { from: "pdf", to: "xlsx" },
-              { from: "pdf", to: "pptx" },
-              { from: "pdf", to: "jpg" },
-              { from: "pdf", to: "png" },
-              { from: "docx", to: "pdf" },
-              { from: "jpg", to: "pdf" },
-              { from: "pptx", to: "pdf" },
-            ].map((chip, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-2.5 bg-white border border-[#D7DBE0] rounded-xl px-4 py-3 font-mono-custom text-xs font-medium"
-              >
-                <span className="text-[#8A6A00]">{chip.from}</span>
-                <span className="text-[#FF7A1A]">→</span>
-                <span className="text-[#1C7A38]">{chip.to}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* HOW IT WORKS */}
-        <section id="how-it-works" className="py-20">
-          <div className="max-w-[520px] mb-12">
-            <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-3 text-[#13161C]">
-              Three steps, no detours
-            </h2>
-            <p className="text-[#4A505C] text-sm sm:text-base leading-relaxed">
-              Every conversion runs the same clean path — drop the file, we handle the formatting, you get it back exactly as it looked.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-            <div className="bg-white border border-[#D7DBE0] rounded-2xl p-7">
-              <div className="font-mono-custom text-xs font-semibold text-[#C85400] bg-[#FFEBD9] w-8 h-8 rounded-full flex items-center justify-center mb-5">
-                01
-              </div>
-              <h3 className="font-display font-semibold text-lg mb-2 text-[#13161C]">
-                Drop your file
-              </h3>
-              <p className="text-sm text-[#4A505C] leading-relaxed">
-                Drag it in or browse from your device. We accept files up to 100MB.
-              </p>
-            </div>
-
-            <div className="bg-white border border-[#D7DBE0] rounded-2xl p-7">
-              <div className="font-mono-custom text-xs font-semibold text-[#C85400] bg-[#FFEBD9] w-8 h-8 rounded-full flex items-center justify-center mb-5">
-                02
-              </div>
-              <h3 className="font-display font-semibold text-lg mb-2 text-[#13161C]">
-                Pick a format
-              </h3>
-              <p className="text-sm text-[#4A505C] leading-relaxed">
-                Choose where it's going — Word, Excel, image, or back into PDF.
-              </p>
-            </div>
-
-            <div className="bg-white border border-[#D7DBE0] rounded-2xl p-7">
-              <div className="font-mono-custom text-xs font-semibold text-[#C85400] bg-[#FFEBD9] w-8 h-8 rounded-full flex items-center justify-center mb-5">
-                03
-              </div>
-              <h3 className="font-display font-semibold text-lg mb-2 text-[#13161C]">
-                Download it
-              </h3>
-              <p className="text-sm text-[#4A505C] leading-relaxed">
-                Your converted file is ready in seconds, with layout and fonts intact.
-              </p>
-            </div>
-          </div>
-        </section>
+      {/* 3. MARQUEE */}
+      <div className="border-t-[3px] border-b-[3px] border-[#0B0B14] bg-[#0B0B14] overflow-hidden py-3.5">
+        <div className="animate-marquee">
+          <span>
+            IMAGES → PDF ✦ DELETE & REORDER PAGES ✦ WATERMARKS & PAGE NUMBERS ✦ EXTRACT TEXT ✦ COMPRESS PDF ✦ PDF → IMAGES ✦ DARK MODE ✦{" "}
+          </span>
+          <span>
+            IMAGES → PDF ✦ DELETE & REORDER PAGES ✦ WATERMARKS & PAGE NUMBERS ✦ EXTRACT TEXT ✦ COMPRESS PDF ✦ PDF → IMAGES ✦ DARK MODE ✦{" "}
+          </span>
+        </div>
       </div>
 
-      {/* FEATURES */}
-      <section className="features-bg text-white rounded-3xl p-10 md:p-16 mx-5 md:mx-10 my-6">
-        <div className="max-w-[1180px] mx-auto space-y-12">
-          <div className="max-w-[520px]">
-            <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight mb-3 text-white">
-              Built for files you can't afford to mess up
+      {/* 4. PRODUCT FAMILY GRID */}
+      <section id="lineup" className="py-16">
+        <div className="max-w-[1180px] mx-auto px-6">
+          <div className="max-w-[640px] mx-auto mb-13 text-center">
+            <span className="font-mono-custom text-xs font-semibold text-[#4B1FCB] uppercase tracking-widest inline-block mb-3">
+              // the lineup
+            </span>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#0B0B14] mb-2.5">
+              the full product family
             </h2>
-            <p className="text-[#B7BCC6] text-sm sm:text-base leading-relaxed">
-              Formatting, tables, and images survive the trip — both ways.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="pt-4 border-t border-[#2C3038] space-y-2">
-              <span className="font-mono-custom text-xs text-[#FF7A1A] font-semibold block">A</span>
-              <h4 className="font-display font-semibold text-base text-white">Layout stays intact</h4>
-              <p className="text-xs text-[#9BA0AA] leading-relaxed">
-                Columns, tables, and images land in the same place they started.
-              </p>
-            </div>
-
-            <div className="pt-4 border-t border-[#2C3038] space-y-2">
-              <span className="font-mono-custom text-xs text-[#E8B400] font-semibold block">B</span>
-              <h4 className="font-display font-semibold text-base text-white">Files auto-delete</h4>
-              <p className="text-xs text-[#9BA0AA] leading-relaxed">
-                Everything you upload is wiped from our servers after one hour.
-              </p>
-            </div>
-
-            <div className="pt-4 border-t border-[#2C3038] space-y-2">
-              <span className="font-mono-custom text-xs text-[#FF7A1A] font-semibold block">C</span>
-              <h4 className="font-display font-semibold text-base text-white">Batch conversion</h4>
-              <p className="text-xs text-[#9BA0AA] leading-relaxed">
-                Queue up to 20 files and convert them together.
-              </p>
-            </div>
-
-            <div className="pt-4 border-t border-[#2C3038] space-y-2">
-              <span className="font-mono-custom text-xs text-[#2FA84F] font-semibold block">D</span>
-              <h4 className="font-display font-semibold text-base text-white">Works on any device</h4>
-              <p className="text-xs text-[#9BA0AA] leading-relaxed">
-                No install. Runs in the browser on desktop, tablet, or phone.
-              </p>
-            </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {[
+              { name: "Images → PDF", emoji: "🖼️", bg: "#C6FF3D", text: "#0B0B14", rot: "-rotate-[1.5deg]", tab: "imagesToPdf" },
+              { name: "Reorder Pages", emoji: "📋", bg: "#FF3D9A", text: "#FFFFFF", rot: "rotate-[1deg]", tab: "pageManager" },
+              { name: "Watermark", emoji: "✍️", bg: "#6E3CF6", text: "#FFFFFF", rot: "-rotate-[0.5deg]", tab: "watermark" },
+              { name: "Extract Text", emoji: "📝", bg: "#3B7DED", text: "#FFFFFF", rot: "rotate-[1deg]", tab: "extractText" },
+              { name: "Compress PDF", emoji: "📉", bg: "#4B1FCB", text: "#FFFFFF", rot: "-rotate-[1.5deg]", tab: "compress" },
+              { name: "PDF → Images", emoji: "📦", bg: "#1F9D55", text: "#FFFFFF", rot: "rotate-[1deg]", tab: "pdfToImages" },
+              { name: "PDF Dark Mode", emoji: "🌙", bg: "#0B0B14", text: "#C6FF3D", rot: "-rotate-[0.5deg]", tab: "darkmode" },
+              { name: "Merge PDF", emoji: "🥞", bg: "#E8622A", text: "#FFFFFF", rot: "rotate-[1deg]", tab: "merge" },
+              { name: "Split PDF", emoji: "✂️", bg: "#2AA9C4", text: "#FFFFFF", rot: "-rotate-[0.5deg]", tab: "split" },
+              { name: "Word → PDF", emoji: "📄", bg: "#3B7DED", text: "#FFFFFF", rot: "-rotate-[1.5deg]", tab: "uploader" },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                onClick={() => {
+                  if (item.tab === "darkmode") setActiveTab("darkmode");
+                  else if (item.tab === "compress") setActiveTab("compress");
+                  else if (item.tab === "pdfToImages") setActiveTab("pdfToImages");
+                  else if (item.tab === "imagesToPdf") setActiveTab("imagesToPdf");
+                  else if (item.tab === "pageManager") setActiveTab("pageManager");
+                  else if (item.tab === "watermark") setActiveTab("watermark");
+                  else if (item.tab === "extractText") setActiveTab("extractText");
+                  else if (item.tab === "merge") { setActiveTab("operations"); setOpMode("merge"); }
+                  else if (item.tab === "split") { setActiveTab("operations"); setOpMode("split"); }
+                  else setActiveTab("uploader");
+                  const ws = document.getElementById("workspace");
+                  ws?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className={`bg-white border-[3px] border-[#0B0B14] rounded-2xl p-5 text-center shadow-[4px_4px_0_#0B0B14] hover:translate-y-[-5px] hover:rotate-0 hover:shadow-[8px_8px_0_#0B0B14] transition-all cursor-pointer ${item.rot}`}
+              >
+                <div
+                  style={{ backgroundColor: item.bg, color: item.text }}
+                  className="w-11 h-11 mx-auto mb-3 border-2 border-[#0B0B14] rounded-xl flex items-center justify-center font-display font-bold text-sm shadow-xs"
+                >
+                  {item.emoji}
+                </div>
+                <p className="font-display font-semibold text-xs text-[#0B0B14]">{item.name}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA BAND & FOOTER */}
-      <div className="max-w-[1180px] w-full mx-auto px-5 md:px-10">
-        <section className="text-center py-24 space-y-4">
-          <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[#13161C]">
-            Your file is one drop away.
-          </h2>
-          <p className="text-[#4A505C] text-sm sm:text-base">
-            No account, no credit card, no catch.
-          </p>
-          <div className="pt-2">
-            <a
-              href="#dropzone"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-sm font-semibold bg-[#FF7A1A] text-white hover:bg-[#C85400] transition-colors"
-            >
-              Convert a file now
-            </a>
-          </div>
-        </section>
-
-        <footer className="border-t border-[#D7DBE0] py-10">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-5 text-xs text-[#8A909B]">
-            <div className="flex items-center gap-2 font-display font-semibold text-base text-[#13161C]">
-              <span className="w-[20px] h-[20px] relative block">
-                <svg viewBox="0 0 26 26" className="w-full h-full">
-                  <path d="M4 2h13l5 5v17H4z" fill="none" stroke="#13161C" strokeWidth="1.6" />
-                  <path d="M17 2v5h5" fill="none" stroke="#13161C" strokeWidth="1.6" />
-                </svg>
-              </span>
-              Foldr
-            </div>
-
-            <div className="flex items-center gap-7">
-              <a href="#" className="hover:text-[#13161C] transition-colors">Privacy</a>
-              <a href="#" className="hover:text-[#13161C] transition-colors">Terms</a>
-              <a href="#" className="hover:text-[#13161C] transition-colors">API</a>
-              <a href="#" className="hover:text-[#13161C] transition-colors">Contact</a>
-            </div>
-
-            <div className="font-mono-custom">
-              © 2026 Foldr
-            </div>
-          </div>
-        </footer>
-      </div>
+      {/* 5. FOOTER */}
+      <footer className="py-10 text-center font-mono-custom text-xs text-[#6b6884]">
+        <div className="max-w-[1180px] mx-auto px-6">
+          © 2026 flip. — client-side PDF studio
+        </div>
+      </footer>
     </div>
   );
 }

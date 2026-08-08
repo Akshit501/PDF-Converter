@@ -1,28 +1,28 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-space-grotesk",
   weight: ["400", "500", "600", "700"],
 });
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-body",
-  weight: ["400", "500", "600"],
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
+  weight: ["400", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Foldr — PDF converter",
-  description: "Turn any PDF into the file you actually need. Fast, secure, and zero watermark.",
+  title: "flip. // pdf converter",
+  description: "turn any file into a PDF in seconds. zero installs, zero cap.",
 };
 
 export default function RootLayout({
@@ -33,9 +33,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-[#EEF0F2] text-[#13161C] selection:bg-[#2F5DFF] selection:text-white">
+      <body className="min-h-full flex flex-col font-sans bg-[#F5F2FF] text-[#0B0B14] selection:bg-[#C6FF3D] selection:text-[#0B0B14]">
         {children}
       </body>
     </html>

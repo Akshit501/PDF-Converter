@@ -2,58 +2,73 @@
 
 import React, { useState, useRef } from "react";
 import {
-  Moon,
-  Sparkles,
+  Image as ImageIcon,
   Download,
   Loader2,
   CheckCircle2,
   AlertCircle,
   FileText,
-  RefreshCw,
-  ChevronDown,
+  Archive,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { usePdfDarkMode } from "@/src/hooks/usePdfDarkMode";
-import { DARK_MODE_PRESETS, DarkModePreset } from "@/src/lib/pdfDarkMode";
+import {
+  convertPdfToImages,
+  ImageFormat,
+  PdfToImagesResult,
+} from "@/src/lib/pdfToImages";
 
-export interface PdfDarkModeToolProps {
+export interface PdfToImagesToolProps {
   selectedFile?: File;
   className?: string;
 }
 
-export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
+export const PdfToImagesTool: React.FC<PdfToImagesToolProps> = ({
   selectedFile: initialFile,
   className = "",
 }) => {
   const [file, setFile] = useState<File | null>(initialFile || null);
-  const [selectedPreset, setSelectedPreset] = useState<DarkModePreset>("charcoal");
+  const [format, setFormat] = useState<ImageFormat>("png");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
+  const [result, setResult] = useState<PdfToImagesResult | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const { isProcessing, currentPage, totalPages, progressPercent, result, error, convert, reset } =
-    usePdfDarkMode();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
-      reset();
+      setResult(null);
+      setErrorMessage(null);
     }
   };
 
-  const handleStartConversion = async () => {
-    if (!file) return;
+  const handleExecuteExport = async () => {
+    if (!file) {
+      setErrorMessage("Please choose a PDF file to export as images.");
+      return;
+    }
+    setErrorMessage(null);
+    setIsProcessing(true);
+    setProgress({ current: 0, total: 1 });
+
     try {
-      await convert(file, selectedPreset);
-    } catch (err) {
-      console.error(err);
+      const res = await convertPdfToImages(file, format, 0.92, (cur, tot) => {
+        setProgress({ current: cur, total: tot });
+      });
+      setResult(res);
+    } catch (err: any) {
+      setErrorMessage(err?.message || "Failed to export PDF pages to images.");
+    } finally {
+      setIsProcessing(false);
+      setProgress(null);
     }
   };
 
   const handleDownload = () => {
-    if (!result?.blobUrl || !file) return;
+    if (!result) return;
     const a = document.createElement("a");
     a.href = result.blobUrl;
-    const baseName = file.name.replace(/\.[^/.]+$/, "");
-    a.download = `${baseName}_dark_${selectedPreset}.pdf`;
+    a.download = result.filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -66,80 +81,60 @@ export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 rounded-xl bg-[#6E3CF6] text-white border-2 border-[#0B0B14] flex items-center justify-center font-bold shadow-xs">
-              <Moon className="w-6 h-6 stroke-[2]" />
+              <ImageIcon className="w-6 h-6 stroke-[2]" />
             </div>
             <div>
               <h3 className="font-display font-bold text-xl text-[#0B0B14]">
-                Dark Mode Converter
+                PDF to Images Exporter
               </h3>
               <p className="text-xs text-[#5a5770] font-sans">
-                Processes PDF background inversion 100% client-side in your browser
+                Export pages as PNG or JPG images packaged into a ZIP archive
               </p>
             </div>
           </div>
 
           <div className="hidden sm:flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-[#C6FF3D] border-2 border-[#0B0B14] text-[#0B0B14] text-xs font-mono-custom font-bold">
-            <Sparkles className="w-4 h-4 text-[#6E3CF6]" />
-            <span>Browser Engine</span>
+            <Archive className="w-4 h-4 text-[#6E3CF6]" />
+            <span>ZIP Packaging</span>
           </div>
         </div>
 
-        {/* Theme Selector Dropdown & Preset Buttons */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <label className="text-xs uppercase tracking-wider text-[#0B0B14] font-mono-custom font-bold">
-              Theme Selector Dropdown
-            </label>
+        {/* Format Selector */}
+        <div className="space-y-2 pt-2">
+          <label className="text-xs uppercase tracking-wider text-[#0B0B14] font-mono-custom font-bold">
+            Select Export Format
+          </label>
 
-            {/* Dropdown Select Box */}
-            <div className="relative inline-block">
-              <select
-                value={selectedPreset}
-                onChange={(e) => setSelectedPreset(e.target.value as DarkModePreset)}
-                className="appearance-none bg-white border-2 border-[#0B0B14] rounded-xl px-3.5 py-1.5 pr-8 text-xs font-display font-bold text-[#0B0B14] shadow-xs outline-none cursor-pointer hover:bg-[#F5F2FF]"
-              >
-                <option value="charcoal">Dark Charcoal (#121212)</option>
-                <option value="oled">OLED Black (#000000)</option>
-                <option value="midnight">Midnight Blue (#0F172A)</option>
-              </select>
-              <ChevronDown className="w-4 h-4 text-[#0B0B14] absolute right-2.5 top-2.5 pointer-events-none" />
-            </div>
-          </div>
-
-          {/* Preset Selector Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {(Object.keys(DARK_MODE_PRESETS) as DarkModePreset[]).map((presetKey) => {
-              const preset = DARK_MODE_PRESETS[presetKey];
-              const isSelected = selectedPreset === presetKey;
-
+          <div className="flex items-center space-x-3">
+            {[
+              { id: "png", label: "PNG Image (.png)", desc: "Lossless quality" },
+              { id: "jpeg", label: "JPG Image (.jpg)", desc: "Optimized file size" },
+            ].map((item) => {
+              const isSelected = format === item.id;
               return (
                 <button
-                  key={presetKey}
+                  key={item.id}
                   type="button"
-                  onClick={() => setSelectedPreset(presetKey)}
-                  className={`p-4 rounded-xl border-2 border-[#0B0B14] text-left flex items-center space-x-3 transition-all duration-200 ${
+                  onClick={() => setFormat(item.id as ImageFormat)}
+                  className={`flex-1 p-4 rounded-xl border-2 border-[#0B0B14] text-left transition-all duration-200 ${
                     isSelected
                       ? "bg-[#C6FF3D] shadow-[4px_4px_0_#0B0B14]"
                       : "bg-white hover:bg-[#F5F2FF]"
                   }`}
                 >
-                  <div
-                    style={{ backgroundColor: preset.hexBg }}
-                    className="w-8 h-8 rounded-lg border-2 border-[#0B0B14] flex-shrink-0 flex items-center justify-center text-xs font-bold text-white shadow-xs"
-                  >
-                    Aa
-                  </div>
-                  <div>
-                    <p className="text-xs font-display font-bold text-[#0B0B14]">{preset.label}</p>
-                    <p className="text-[10px] text-[#5a5770] font-mono-custom">{preset.hexBg}</p>
-                  </div>
+                  <p className="font-display font-bold text-xs text-[#0B0B14]">
+                    {item.label}
+                  </p>
+                  <p className="text-[10px] text-[#5a5770] mt-1 font-sans">
+                    {item.desc}
+                  </p>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* File Input & Controls */}
+        {/* Controls */}
         <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 border-t-2 border-[#0B0B14]">
           <div className="flex items-center space-x-3 w-full sm:w-auto">
             <input
@@ -162,19 +157,19 @@ export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
 
           <button
             type="button"
-            onClick={handleStartConversion}
+            onClick={handleExecuteExport}
             disabled={!file || isProcessing}
             className="w-full sm:w-auto px-7 py-3 rounded-xl bg-[#0B0B14] text-[#C6FF3D] border-[3px] border-[#0B0B14] text-xs font-display font-bold transition-all disabled:opacity-50 flex items-center justify-center space-x-2 shadow-[4px_4px_0_#0B0B14] hover:translate-x-[-2px] hover:translate-y-[-2px]"
           >
             {isProcessing ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Converting...</span>
+                <span>Exporting Images...</span>
               </>
             ) : (
               <>
-                <RefreshCw className="w-4 h-4" />
-                <span>Convert to Dark Mode</span>
+                <ImageIcon className="w-4 h-4" />
+                <span>Export PDF to Images</span>
               </>
             )}
           </button>
@@ -183,7 +178,7 @@ export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
 
       {/* Progress Bar */}
       <AnimatePresence>
-        {isProcessing && (
+        {isProcessing && progress && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -191,15 +186,17 @@ export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
             className="p-6 rounded-2xl bg-white border-[3px] border-[#0B0B14] shadow-[6px_6px_0_#0B0B14] space-y-3"
           >
             <div className="flex items-center justify-between text-xs font-display font-bold text-[#0B0B14]">
-              <span>Processing Pages Client-Side...</span>
+              <span>Rendering Page Frames to Blobs...</span>
               <span className="text-[#6E3CF6] font-mono-custom">
-                Page {currentPage} of {totalPages} ({progressPercent}%)
+                Page {progress.current} of {progress.total}
               </span>
             </div>
 
             <div className="w-full h-3 rounded-full bg-[#F5F2FF] border-2 border-[#0B0B14] overflow-hidden">
               <div
-                style={{ width: `${progressPercent}%` }}
+                style={{
+                  width: `${Math.round((progress.current / progress.total) * 100)}%`,
+                }}
                 className="h-full bg-[#6E3CF6] transition-all duration-300 rounded-full"
               />
             </div>
@@ -208,14 +205,14 @@ export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
       </AnimatePresence>
 
       {/* Error Alert */}
-      {error && (
+      {errorMessage && (
         <div className="p-4 rounded-xl bg-[#FF3D9A] text-white border-[3px] border-[#0B0B14] shadow-[4px_4px_0_#0B0B14] text-xs font-bold font-display flex items-center space-x-2">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          <span>{error}</span>
+          <span>{errorMessage}</span>
         </div>
       )}
 
-      {/* Result & Live Page Preview */}
+      {/* Export Result Banner & Previews */}
       <AnimatePresence>
         {result && (
           <motion.div
@@ -228,10 +225,10 @@ export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
                 <CheckCircle2 className="w-7 h-7 text-[#6E3CF6]" />
                 <div>
                   <h4 className="font-display font-bold text-base text-[#0B0B14]">
-                    Dark Mode Conversion Complete!
+                    PDF Exported Successfully!
                   </h4>
-                  <p className="text-xs text-[#5a5770] font-sans">
-                    Converted {result.totalPages} pages with '{DARK_MODE_PRESETS[selectedPreset].label}' theme
+                  <p className="text-xs text-[#5a5770] font-mono-custom">
+                    {result.totalPages} {result.totalPages === 1 ? "image" : "images"} ({result.filename})
                   </p>
                 </div>
               </div>
@@ -242,27 +239,27 @@ export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
                 className="px-6 py-3 rounded-xl bg-[#C6FF3D] text-[#0B0B14] border-2 border-[#0B0B14] text-xs font-display font-bold transition-all flex items-center justify-center space-x-2 shadow-[4px_4px_0_#0B0B14] hover:translate-x-[-2px] hover:translate-y-[-2px]"
               >
                 <Download className="w-4 h-4" />
-                <span>Download Dark PDF</span>
+                <span>{result.isZip ? "Download Images (.zip)" : "Download Image"}</span>
               </button>
             </div>
 
-            {/* Live Page Frame Preview */}
-            {result.previewCanvasFrames.length > 0 && (
+            {/* Live Page Frame Previews */}
+            {result.imageFrames.length > 0 && (
               <div className="space-y-2">
                 <label className="text-xs uppercase tracking-wider text-[#0B0B14] font-mono-custom font-bold">
-                  Live Rendered Page Previews
+                  Exported Page Previews
                 </label>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-60 overflow-y-auto p-1">
-                  {result.previewCanvasFrames.map((canvas, idx) => (
+                  {result.imageFrames.map((dataUrl, idx) => (
                     <div
                       key={idx}
                       className="p-2 rounded-xl bg-[#F5F2FF] border-2 border-[#0B0B14] space-y-1.5 flex flex-col items-center shadow-xs"
                     >
-                      <div className="w-full aspect-[3/4] rounded-lg overflow-hidden border-2 border-[#0B0B14] bg-black flex items-center justify-center">
+                      <div className="w-full aspect-[3/4] rounded-lg overflow-hidden border-2 border-[#0B0B14] bg-white flex items-center justify-center">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={canvas.toDataURL()}
+                          src={dataUrl}
                           alt={`Page ${idx + 1}`}
                           className="w-full h-full object-contain"
                         />
@@ -282,4 +279,4 @@ export const PdfDarkModeTool: React.FC<PdfDarkModeToolProps> = ({
   );
 };
 
-export default PdfDarkModeTool;
+export default PdfToImagesTool;

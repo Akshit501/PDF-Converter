@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useId } from "react";
 import {
   FileText,
   Image as ImageIcon,
@@ -79,6 +79,7 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   const [expandedFileId, setExpandedFileId] = useState<string | null>(null);
   const [previewFile, setPreviewFile] = useState<UploadedFile | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const uniqueInputId = useId();
 
   const files = externalFiles !== undefined ? externalFiles : internalFiles;
 
@@ -194,26 +195,26 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
     updateFiles(updatedList);
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (!isDragging) setIsDragging(true);
   };
 
-  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragEnter = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
   };
 
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.currentTarget.contains(e.relatedTarget as Node)) return;
     setIsDragging(false);
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
@@ -233,21 +234,11 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   };
 
   const handleRemoveFile = (id: string, e?: React.MouseEvent) => {
+    e?.preventDefault();
     e?.stopPropagation();
     const updated = files.filter((f) => f.id !== id);
     updateFiles(updated);
     if (expandedFileId === id) setExpandedFileId(null);
-  };
-
-  const handleRotateFile = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const updated = files.map((f) => {
-      if (f.id === id) {
-        return { ...f, rotation: ((f.rotation || 0) + 90) % 360 };
-      }
-      return f;
-    });
-    updateFiles(updated);
   };
 
   const handleClearAll = () => {
@@ -257,46 +248,87 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
   };
 
   return (
-    <div className={`w-full max-w-xl mx-auto space-y-5 ${className}`}>
-      {/* Foldr Style Dropzone Container */}
-      <div
-        onDragOver={handleDragOver}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
-        tabIndex={0}
-        role="button"
-        aria-label="Dropzone"
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            fileInputRef.current?.click();
-          }
-        }}
-        className={`w-full border-[1.5px] border-dashed rounded-[14px] p-6 text-center transition-all duration-200 cursor-pointer outline-none ${
-          isDragging
-            ? "border-[#FF7A1A] bg-[#FFEBD9]/70 scale-[1.01]"
-            : "border-[#D7DBE0] hover:border-[#FF7A1A] bg-[#FFFFFF] hover:bg-[#F9FAFB]"
-        }`}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
-          multiple={multiple}
-          onChange={handleInputChange}
-          className="hidden"
-        />
-
-        <div className="space-y-1">
-          <div className="text-sm font-semibold text-[#13161C] font-sans">
-            {isDragging ? "Drop your file here" : "Drag a file here to convert"}
-          </div>
-          <p className="text-xs text-[#8A909B] font-mono-custom">
-            or click to browse — up to {maxSizeMB}MB
-          </p>
+    <div className={`w-full max-w-xl mx-auto space-y-6 ${className}`}>
+      {/* HTML Screenshot Matched Dropzone Card */}
+      <div className="relative">
+        {/* Rotated Stickers */}
+        <div className="absolute -top-5 -right-4 z-20 bg-[#C6FF3D] text-[#0B0B14] border-[3px] border-[#0B0B14] rounded-full w-20 h-20 flex flex-col items-center justify-center text-center font-mono-custom text-[11px] font-bold leading-tight rotate-[10deg] shadow-[4px_4px_0_#0B0B14]">
+          <span>100%</span>
+          <span>FREE</span>
         </div>
+
+        <div className="absolute -bottom-4 -left-5 z-20 bg-[#6E3CF6] text-white border-[3px] border-[#0B0B14] rounded-full w-[68px] h-[68px] flex flex-col items-center justify-center text-center font-mono-custom text-[10px] font-bold leading-tight -rotate-[12deg] shadow-[4px_4px_0_#0B0B14]">
+          <span>no</span>
+          <span>watermark</span>
+        </div>
+
+        {/* Dropzone Container */}
+        <label
+          htmlFor={uniqueInputId}
+          onDragOver={handleDragOver}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              fileInputRef.current?.click();
+            }
+          }}
+          className={`relative block w-full bg-white border-[3px] border-[#0B0B14] rounded-[22px] p-8 sm:p-10 text-center transition-all duration-200 cursor-pointer outline-none touch-manipulation select-none rotate-[1.4deg] shadow-[12px_12px_0_#0B0B14] active:scale-[0.99] group ${
+            isDragging ? "bg-[#F5F2FF] scale-[1.01]" : "hover:bg-[#FAF8FF]"
+          }`}
+        >
+          {/* Dashed Inset Ring */}
+          <div className="absolute inset-[10px] border-2 border-dashed border-[#0B0B14]/35 rounded-[14px] pointer-events-none" />
+
+          <input
+            id={uniqueInputId}
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+            multiple={multiple}
+            onChange={handleInputChange}
+            className="hidden"
+          />
+
+          <div className="relative z-10 flex flex-col items-center justify-center space-y-4 py-3">
+            {/* Rotated Lime Drop Icon Box */}
+            <div className="w-16 h-16 bg-[#C6FF3D] border-[3px] border-[#0B0B14] rounded-2xl flex items-center justify-center text-2xl font-bold -rotate-8 shadow-xs group-hover:rotate-0 transition-transform">
+              📄
+            </div>
+
+            {/* Title & Sub */}
+            <div className="space-y-1">
+              <h3 className="font-display font-bold text-xl sm:text-2xl text-[#0B0B14]">
+                drop your file here
+              </h3>
+              <p className="text-sm text-[#5a5770] font-sans">
+                or tap below to browse
+              </p>
+            </div>
+
+            {/* Neo-Brutalist Action Button */}
+            <div className="w-full pt-2">
+              <span className="block w-full bg-[#0B0B14] text-[#C6FF3D] border-[3px] border-[#0B0B14] rounded-xl py-3.5 px-6 font-display font-bold text-base shadow-[4px_4px_0_#0B0B14] group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[6px_6px_0_#0B0B14] transition-all">
+                + choose file
+              </span>
+            </div>
+
+            {/* Format Chips */}
+            <div className="flex flex-wrap justify-center gap-2 pt-2">
+              {[".docx", ".xlsx", ".pptx", ".jpg", ".png"].map((fmt, idx) => (
+                <span
+                  key={idx}
+                  className="font-mono-custom text-xs font-semibold border-2 border-[#0B0B14] rounded-full px-2.5 py-1 bg-white text-[#0B0B14]"
+                >
+                  {fmt}
+                </span>
+              ))}
+            </div>
+          </div>
+        </label>
       </div>
 
       {/* Error Alert */}
@@ -306,49 +338,46 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="flex items-center justify-between p-3.5 rounded-xl bg-[#FFF6D6] border border-[#E8B400]/40 text-[#8A6A00] text-xs font-medium"
+            className="flex items-center justify-between p-4 rounded-xl bg-[#FF3D9A] text-white border-[3px] border-[#0B0B14] shadow-[4px_4px_0_#0B0B14] text-xs font-bold font-display"
           >
             <div className="flex items-center space-x-2.5">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 text-[#E8B400]" />
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
               <span>{errorMessage}</span>
             </div>
             <button
+              type="button"
               onClick={() => setErrorMessage(null)}
-              className="p-1 rounded hover:bg-[#E8B400]/10 text-[#8A6A00] transition-colors"
+              className="p-1 rounded hover:bg-black/20 text-white transition-colors"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-4 h-4" />
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Uploaded File List */}
+      {/* Uploaded Files List */}
       {files.length > 0 && (
         <div className="space-y-3 pt-2">
           <div className="flex items-center justify-between px-1">
-            <div className="flex items-center space-x-2">
-              <span className="font-mono-custom text-xs font-semibold uppercase tracking-wider text-[#4A505C]">
-                Loaded Files ({files.length})
-              </span>
-            </div>
+            <span className="font-mono-custom text-xs font-bold uppercase tracking-wider text-[#0B0B14]">
+              Loaded Files ({files.length})
+            </span>
 
             <div className="flex items-center space-x-3">
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="flex items-center space-x-1 text-xs font-semibold text-[#FF7A1A] hover:text-[#C85400] transition-colors"
+              <label
+                htmlFor={uniqueInputId}
+                className="flex items-center space-x-1 text-xs font-bold text-[#6E3CF6] hover:text-[#4B1FCB] cursor-pointer py-1 px-2.5 rounded-lg border-2 border-[#0B0B14] bg-white shadow-xs"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add file</span>
-              </button>
-              <span className="text-[#D7DBE0]">·</span>
+              </label>
               <button
                 type="button"
                 onClick={handleClearAll}
-                className="flex items-center space-x-1 text-xs font-medium text-[#8A909B] hover:text-[#C85400] transition-colors"
+                className="flex items-center space-x-1 text-xs font-semibold text-[#0B0B14] hover:text-[#FF3D9A] py-1 px-2.5 rounded-lg border-2 border-[#0B0B14] bg-white shadow-xs"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Clear</span>
+                <span>Clear all</span>
               </button>
             </div>
           </div>
@@ -368,19 +397,17 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="p-3.5 rounded-xl bg-white border border-[#D7DBE0] shadow-sm flex flex-col space-y-2"
+                    className="p-4 rounded-xl bg-white border-[3px] border-[#0B0B14] shadow-[4px_4px_0_#0B0B14] flex flex-col space-y-2"
                   >
                     <div className="flex items-center justify-between space-x-3">
-                      {/* Left: Thumbnail & Name */}
+                      {/* Thumbnail & Name */}
                       <div className="flex items-center space-x-3 min-w-0 flex-1">
                         <div
-                          style={{
-                            transform: `rotate(${file.rotation || 0}deg)`,
-                          }}
-                          className="relative flex-shrink-0 w-11 h-11 rounded-lg overflow-hidden bg-[#EEF0F2] border border-[#D7DBE0] flex items-center justify-center"
+                          style={{ transform: `rotate(${file.rotation || 0}deg)` }}
+                          className="relative flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-[#C6FF3D] border-2 border-[#0B0B14] flex items-center justify-center"
                         >
                           {file.isLoadingDetails ? (
-                            <Loader2 className="w-4 h-4 text-[#FF7A1A] animate-spin" />
+                            <Loader2 className="w-5 h-5 text-[#0B0B14] animate-spin" />
                           ) : file.previewUrl ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -389,37 +416,31 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                               className="w-full h-full object-cover"
                             />
                           ) : isPDF ? (
-                            <FileText className="w-5 h-5 text-[#8A6A00]" />
+                            <FileText className="w-6 h-6 text-[#0B0B14]" />
                           ) : (
-                            <ImageIcon className="w-5 h-5 text-[#1C7A38]" />
+                            <ImageIcon className="w-6 h-6 text-[#0B0B14]" />
                           )}
                         </div>
 
                         <div className="min-w-0 flex-1 space-y-0.5">
                           <div className="flex items-center space-x-2">
                             <p
-                              className="text-xs font-semibold text-[#13161C] truncate max-w-[200px] sm:max-w-xs"
+                              className="text-sm font-display font-bold text-[#0B0B14] truncate max-w-[180px] sm:max-w-xs"
                               title={file.name}
                             >
                               {file.name}
                             </p>
-                            <span
-                              className={`px-1.5 py-0.2 text-[10px] font-mono-custom font-medium rounded uppercase ${
-                                isPDF
-                                  ? "bg-[#FFF6D6] text-[#8A6A00]"
-                                  : "bg-[#E3F6E7] text-[#1C7A38]"
-                              }`}
-                            >
+                            <span className="px-2 py-0.5 text-[10px] font-mono-custom font-bold rounded-full border-2 border-[#0B0B14] bg-[#F5F2FF] text-[#0B0B14] uppercase">
                               {file.extension.replace(".", "")}
                             </span>
                           </div>
 
-                          <div className="flex items-center space-x-2 text-[11px] text-[#8A909B] font-mono-custom">
+                          <div className="flex items-center space-x-2 text-xs font-mono-custom text-[#5a5770]">
                             <span>{formatFileSize(file.size)}</span>
                             {isPDF && file.pageCount !== undefined && (
                               <>
                                 <span>·</span>
-                                <span className="text-[#FF7A1A] font-medium">
+                                <span className="text-[#6E3CF6] font-bold">
                                   {file.pageCount} {file.pageCount === 1 ? "page" : "pages"}
                                 </span>
                               </>
@@ -428,27 +449,18 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                         </div>
                       </div>
 
-                      {/* Right: Actions */}
+                      {/* Actions */}
                       <div className="flex items-center space-x-1 flex-shrink-0">
                         {file.previewUrl && (
                           <button
                             type="button"
                             onClick={() => setPreviewFile(file)}
-                            className="p-1.5 rounded-lg text-[#8A909B] hover:text-[#13161C] hover:bg-[#EEF0F2] transition-colors"
+                            className="p-2 rounded-lg border-2 border-[#0B0B14] bg-white hover:bg-[#C6FF3D] transition-colors"
                             title="Preview file"
                           >
-                            <Maximize2 className="w-3.5 h-3.5" />
+                            <Maximize2 className="w-4 h-4" />
                           </button>
                         )}
-
-                        <button
-                          type="button"
-                          onClick={(e) => handleRotateFile(file.id, e)}
-                          className="p-1.5 rounded-lg text-[#8A909B] hover:text-[#13161C] hover:bg-[#EEF0F2] transition-colors"
-                          title="Rotate 90°"
-                        >
-                          <RotateCw className="w-3.5 h-3.5" />
-                        </button>
 
                         {isPDF && file.pageCount && file.pageCount > 1 && (
                           <button
@@ -456,13 +468,13 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                             onClick={() =>
                               setExpandedFileId(isExpanded ? null : file.id)
                             }
-                            className="p-1.5 rounded-lg text-[#8A909B] hover:text-[#13161C] hover:bg-[#EEF0F2] transition-colors"
+                            className="p-2 rounded-lg border-2 border-[#0B0B14] bg-white hover:bg-[#C6FF3D] transition-colors"
                             title="Toggle page grid"
                           >
                             {isExpanded ? (
-                              <ChevronUp className="w-3.5 h-3.5" />
+                              <ChevronUp className="w-4 h-4" />
                             ) : (
-                              <ChevronDown className="w-3.5 h-3.5" />
+                              <ChevronDown className="w-4 h-4" />
                             )}
                           </button>
                         )}
@@ -470,21 +482,21 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                         <button
                           type="button"
                           onClick={(e) => handleRemoveFile(file.id, e)}
-                          className="p-1.5 rounded-lg text-[#8A909B] hover:text-[#C85400] hover:bg-[#FFEBD9] transition-colors"
+                          className="p-2 rounded-lg border-2 border-[#0B0B14] bg-white hover:bg-[#FF3D9A] hover:text-white transition-colors"
                           title="Remove file"
                         >
-                          <X className="w-3.5 h-3.5" />
+                          <X className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
 
-                    {/* PDF Page Grid Breakdown */}
+                    {/* PDF Page Grid */}
                     {isExpanded && isPDF && file.pageCount && (
-                      <div className="pt-2 border-t border-[#D7DBE0] grid grid-cols-4 gap-1.5 text-center">
+                      <div className="pt-2.5 border-t-2 border-[#0B0B14] grid grid-cols-4 sm:grid-cols-6 gap-2 text-center">
                         {Array.from({ length: file.pageCount }).map((_, idx) => (
                           <div
                             key={idx}
-                            className="p-1.5 rounded bg-[#EEF0F2] border border-[#D7DBE0] text-[10px] font-mono-custom text-[#4A505C]"
+                            className="p-2 rounded-lg bg-[#F5F2FF] border-2 border-[#0B0B14] text-xs font-mono-custom font-bold text-[#0B0B14]"
                           >
                             Page {idx + 1}
                           </div>
@@ -507,35 +519,36 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setPreviewFile(null)}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-[#0B0B14]/70 backdrop-blur-xs flex items-center justify-center p-4"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl p-5 max-w-2xl w-full border border-[#D7DBE0] shadow-2xl space-y-3"
+              className="bg-white rounded-2xl p-6 max-w-2xl w-full border-[3px] border-[#0B0B14] shadow-[12px_12px_0_#0B0B14] space-y-4"
             >
-              <div className="flex items-center justify-between pb-2 border-b border-[#D7DBE0]">
-                <span className="font-semibold text-sm text-[#13161C] truncate max-w-md">
+              <div className="flex items-center justify-between pb-3 border-b-2 border-[#0B0B14]">
+                <span className="font-display font-bold text-base text-[#0B0B14] truncate max-w-md">
                   {previewFile.name}
                 </span>
                 <button
+                  type="button"
                   onClick={() => setPreviewFile(null)}
-                  className="p-1 rounded hover:bg-[#EEF0F2] text-[#8A909B]"
+                  className="p-2 rounded-lg border-2 border-[#0B0B14] hover:bg-[#FF3D9A] hover:text-white"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="flex items-center justify-center p-4 bg-[#EEF0F2] rounded-xl min-h-[250px]">
+              <div className="flex items-center justify-center p-4 bg-[#F5F2FF] border-2 border-[#0B0B14] rounded-xl min-h-[300px]">
                 {previewFile.previewUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={previewFile.previewUrl}
                     alt={previewFile.name}
                     style={{ transform: `rotate(${previewFile.rotation || 0}deg)` }}
-                    className="max-h-[50vh] object-contain rounded shadow"
+                    className="max-h-[50vh] object-contain rounded border-2 border-[#0B0B14] shadow-xs"
                   />
                 ) : (
-                  <p className="text-xs text-[#8A909B] font-mono-custom">
+                  <p className="text-xs text-[#5a5770] font-mono-custom">
                     PDF Document Preview
                   </p>
                 )}
