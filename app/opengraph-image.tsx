@@ -21,19 +21,8 @@ export default async function Image() {
           justifyContent: "center",
           fontFamily: "sans-serif",
           padding: "60px",
-          position: "relative",
         }}
       >
-        {/* Dot pattern background */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: "radial-gradient(circle at 2px 2px, rgba(11, 11, 20, 0.12) 1px, transparent 0)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-
         {/* Card Container */}
         <div
           style={{
@@ -53,6 +42,9 @@ export default async function Image() {
           {/* Badge */}
           <div
             style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               background: "#C6FF3D",
               color: "#0B0B14",
               border: "4px solid #0B0B14",
@@ -63,12 +55,16 @@ export default async function Image() {
               transform: "rotate(-2deg)",
             }}
           >
-            ✦ ZERO INSTALLS · 100% IN-BROWSER
+            ZERO INSTALLS · 100% IN-BROWSER
           </div>
 
-          {/* Title */}
+          {/* Title Container */}
           <div
             style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "12px",
               fontSize: "64px",
               fontWeight: "900",
               color: "#0B0B14",
@@ -76,28 +72,30 @@ export default async function Image() {
               letterSpacing: "-0.03em",
             }}
           >
-            turn any file into a{" "}
+            <span>turn any file into a</span>
             <span
               style={{
+                display: "flex",
                 background: "#6E3CF6",
                 color: "#FFFFFF",
                 padding: "0 16px",
                 borderRadius: "12px",
                 transform: "rotate(-1deg)",
-                display: "inline-block",
               }}
             >
               PDF
-            </span>{" "}
-            in seconds.
+            </span>
+            <span>in seconds.</span>
           </div>
 
           {/* Subtitle */}
           <div
             style={{
+              display: "flex",
               fontSize: "24px",
               color: "#54506A",
               fontWeight: "600",
+              textAlign: "center",
             }}
           >
             Merge, Split, Compress, Dark Mode & Images to PDF — Files Never Leave Your Device.
@@ -108,6 +106,7 @@ export default async function Image() {
             style={{
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "12px",
               fontSize: "32px",
               fontWeight: "bold",
@@ -117,6 +116,9 @@ export default async function Image() {
           >
             <div
               style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 background: "#0B0B14",
                 color: "#C6FF3D",
                 borderRadius: "12px",

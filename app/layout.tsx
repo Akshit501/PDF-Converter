@@ -21,6 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://flip-pdf.vercel.app"),
   title: {
     default: "flip. // pdf converter — 100% Client-Side PDF Studio",
     template: "%s — flip.",
