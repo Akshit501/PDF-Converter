@@ -21,8 +21,35 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "flip. // pdf converter",
-  description: "turn any file into a PDF in seconds. zero installs, zero cap.",
+  title: {
+    default: "flip. // pdf converter — 100% Client-Side PDF Studio",
+    template: "%s — flip.",
+  },
+  description:
+    "Turn any file into a PDF in seconds. Merge, Split, Compress, Dark Mode & Images to PDF. 100% in-browser, files never leave your device.",
+  keywords: [
+    "PDF converter",
+    "JPG to PDF",
+    "Merge PDF",
+    "Split PDF",
+    "Compress PDF",
+    "PDF Dark Mode",
+    "Client-side PDF",
+    "Private PDF converter",
+  ],
+  openGraph: {
+    title: "flip. // pdf converter — 100% Client-Side PDF Studio",
+    description:
+      "Turn any file into a PDF in seconds. Merge, Split, Compress, Dark Mode & Images to PDF. Files never leave your device.",
+    type: "website",
+    siteName: "flip. pdf converter",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "flip. // pdf converter — 100% Client-Side PDF Studio",
+    description:
+      "Turn any file into a PDF in seconds. Merge, Split, Compress, Dark Mode & Images to PDF.",
+  },
 };
 
 export default function RootLayout({

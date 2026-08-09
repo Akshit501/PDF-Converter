@@ -15,7 +15,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F2FF] text-[#0B0B14] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F5F2FF] dark:bg-[#0B0B14] text-[#0B0B14] dark:text-white flex flex-col font-sans transition-colors">
       {/* 1. NAVBAR */}
       <Navbar />
 
@@ -324,9 +324,14 @@ export default function Home() {
       </div>
 
       {/* 9. FOOTER */}
-      <footer className="py-10 text-center font-mono-custom text-xs text-[#6b6884]">
+      <footer className="py-10 text-center font-mono-custom text-xs text-[#6b6884] space-y-2">
         <div className="max-w-[1180px] mx-auto px-6">
           © 2026 flip. — made for people who hate slow converters
+        </div>
+        <div>
+          <a href="/privacy" className="underline hover:text-[#6E3CF6]">
+            Privacy Policy (Files Never Leave Your Device)
+          </a>
         </div>
       </footer>
     </div>
