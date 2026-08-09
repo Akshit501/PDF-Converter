@@ -17,7 +17,7 @@ const FAQS = [
   },
   {
     question: "Does splitting affect document visual quality?",
-    answer: "Not at all. flip. extracts original page objects without re-compressing or degrading quality.",
+    answer: "Not at all. PdfDrip extracts original page objects without re-compressing or degrading quality.",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function SplitPdfPage() {
       </main>
 
       <footer className="py-10 text-center font-mono-custom text-xs text-[#6b6884] space-y-2">
-        <div>© 2026 flip. — client-side PDF studio</div>
+        <div>© 2026 PdfDrip — client-side PDF studio</div>
         <div>
           <a href="/privacy" className="underline hover:text-[#6E3CF6]">
             Privacy Policy (Files Never Leave Your Device)

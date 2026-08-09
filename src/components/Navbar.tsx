@@ -93,16 +93,17 @@ export const Navbar: React.FC = () => {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-display font-bold text-2xl text-[#0B0B14] dark:text-white cursor-pointer group"
+          className="flex items-center gap-2 cursor-pointer group"
           onClick={() => {
             setActiveDropdown(null);
             setIsMegaMenuOpen(false);
           }}
         >
-          <span className="w-8.5 h-8.5 bg-[#0B0B14] text-[#C6FF3D] dark:bg-[#C6FF3D] dark:text-[#0B0B14] border-2 border-[#0B0B14] flex items-center justify-center font-bold text-lg rounded-lg -rotate-6 font-display group-hover:rotate-0 transition-transform">
-            /f
-          </span>
-          flip.
+          <img
+            src="/pdfdrip-logo.png"
+            alt="PdfDrip Logo"
+            className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105"
+          />
         </Link>
 
         {/* Divided Category Dropdown Menus (Desktop) */}

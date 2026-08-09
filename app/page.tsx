@@ -24,8 +24,8 @@ export default function Home() {
         <div className="max-w-[1180px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-center">
           <div>
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 bg-[#C6FF3D] border-[3px] border-[#0B0B14] rounded-full px-3.5 py-1.5 font-mono-custom text-xs font-semibold -rotate-2 mb-6 shadow-xs">
-              ✦ zero installs, zero cap
+            <div className="inline-flex items-center gap-2 bg-[#C6FF3D] border-[3px] border-[#0B0B14] rounded-full px-3.5 py-1.5 font-mono-custom text-xs font-bold -rotate-2 mb-6 shadow-xs">
+              ⚡ GEN Z PDF CONVERTER | SECURE • NO DATA COLLECTED
             </div>
 
             {/* H1 Title */}
@@ -39,7 +39,7 @@ export default function Home() {
 
             {/* Subtitle */}
             <p className="text-lg leading-relaxed text-[#33314a] max-w-md mb-8">
-              drag it in, we crunch it, you download. word, excel, slides, jpgs — whatever's on your camera roll, flip. handles it.
+              drag it in, we crunch it, you download. word, excel, slides, jpgs — whatever's on your camera roll, PdfDrip handles it.
             </p>
 
             {/* Hero CTAs */}
@@ -146,7 +146,7 @@ export default function Home() {
         <div className="max-w-[1180px] mx-auto px-6">
           <div className="max-w-[640px] mx-auto mb-13 text-center">
             <span className="font-mono-custom text-xs font-semibold text-[#4B1FCB] uppercase tracking-widest inline-block mb-3">
-              // why flip.
+              // why PdfDrip
             </span>
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#0B0B14] mb-2.5">
               built different, actually private
@@ -326,7 +326,7 @@ export default function Home() {
       {/* 9. FOOTER */}
       <footer className="py-10 text-center font-mono-custom text-xs text-[#6b6884] space-y-2">
         <div className="max-w-[1180px] mx-auto px-6">
-          © 2026 flip. — made for people who hate slow converters
+          © 2026 PdfDrip — made for people who hate slow converters
         </div>
         <div>
           <a href="/privacy" className="underline hover:text-[#6E3CF6]">

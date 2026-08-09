@@ -21,7 +21,7 @@ const FAQS = [
   },
   {
     question: "What image formats are supported?",
-    answer: "flip. supports JPG, JPEG, PNG, WEBP, and GIF images.",
+    answer: "PdfDrip supports JPG, JPEG, PNG, WEBP, and GIF images.",
   },
 ];
 
@@ -53,7 +53,7 @@ export default function JpgToPdfPage() {
       </main>
 
       <footer className="py-10 text-center font-mono-custom text-xs text-[#6b6884] space-y-2">
-        <div>© 2026 flip. — client-side PDF studio</div>
+        <div>© 2026 PdfDrip — client-side PDF studio</div>
         <div>
           <a href="/privacy" className="underline hover:text-[#6E3CF6]">
             Privacy Policy (Files Never Leave Your Device)

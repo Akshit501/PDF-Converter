@@ -49,7 +49,7 @@ export default function MergePdfPage() {
       </main>
 
       <footer className="py-10 text-center font-mono-custom text-xs text-[#6b6884] space-y-2">
-        <div>© 2026 flip. — client-side PDF studio</div>
+        <div>© 2026 PdfDrip — client-side PDF studio</div>
         <div>
           <a href="/privacy" className="underline hover:text-[#6E3CF6]">
             Privacy Policy (Files Never Leave Your Device)

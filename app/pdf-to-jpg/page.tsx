@@ -13,7 +13,7 @@ const FAQS = [
   },
   {
     question: "What resolution are the exported images?",
-    answer: "flip. renders PDF page canvases at high DPI (2.0x scale) to ensure sharp text and image clarity.",
+    answer: "PdfDrip renders PDF page canvases at high DPI (2.0x scale) to ensure sharp text and image clarity.",
   },
   {
     question: "Do I need unzipping software to extract the images?",
@@ -49,7 +49,7 @@ export default function PdfToJpgPage() {
       </main>
 
       <footer className="py-10 text-center font-mono-custom text-xs text-[#6b6884] space-y-2">
-        <div>© 2026 flip. — client-side PDF studio</div>
+        <div>© 2026 PdfDrip — client-side PDF studio</div>
         <div>
           <a href="/privacy" className="underline hover:text-[#6E3CF6]">
             Privacy Policy (Files Never Leave Your Device)

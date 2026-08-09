@@ -21,14 +21,15 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://flip-pdf.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://pdfdrip.vercel.app"),
   title: {
-    default: "flip. // pdf converter — 100% Client-Side PDF Studio",
-    template: "%s — flip.",
+    default: "PdfDrip — Gen Z PDF Converter | Secure • No Data Collected",
+    template: "%s — PdfDrip",
   },
   description:
     "Turn any file into a PDF in seconds. Merge, Split, Compress, Dark Mode & Images to PDF. 100% in-browser, files never leave your device.",
   keywords: [
+    "PdfDrip",
     "PDF converter",
     "JPG to PDF",
     "Merge PDF",
@@ -39,15 +40,15 @@ export const metadata: Metadata = {
     "Private PDF converter",
   ],
   openGraph: {
-    title: "flip. // pdf converter — 100% Client-Side PDF Studio",
+    title: "PdfDrip — 100% Client-Side PDF Studio",
     description:
       "Turn any file into a PDF in seconds. Merge, Split, Compress, Dark Mode & Images to PDF. Files never leave your device.",
     type: "website",
-    siteName: "flip. pdf converter",
+    siteName: "PdfDrip",
   },
   twitter: {
     card: "summary_large_image",
-    title: "flip. // pdf converter — 100% Client-Side PDF Studio",
+    title: "PdfDrip — 100% Client-Side PDF Studio",
     description:
       "Turn any file into a PDF in seconds. Merge, Split, Compress, Dark Mode & Images to PDF.",
   },

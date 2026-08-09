@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "flip. // pdf converter";
+export const alt = "PdfDrip // pdf converter";
 export const size = {
   width: 1200,
   height: 630,
@@ -126,9 +126,9 @@ export default async function Image() {
                 transform: "rotate(-6deg)",
               }}
             >
-              /f
+              pd
             </div>
-            <span>flip.</span>
+            <span>PdfDrip</span>
           </div>
         </div>
       </div>
