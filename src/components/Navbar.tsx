@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/src/components/ThemeToggle";
+import { PrivacyBanner } from "@/src/components/PrivacyBanner";
 
 type ToolItem = {
   name: string;
@@ -282,6 +283,9 @@ export const Navbar: React.FC = () => {
           ))}
         </div>
       )}
+
+      {/* Live Sliding Privacy Banner */}
+      <PrivacyBanner />
     </nav>
   );
 };
