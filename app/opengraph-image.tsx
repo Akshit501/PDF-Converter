@@ -108,8 +108,8 @@ export default async function Image() {
               alignItems: "center",
               justifyContent: "center",
               gap: "12px",
-              fontSize: "32px",
-              fontWeight: "bold",
+              fontSize: "36px",
+              fontWeight: "900",
               color: "#0B0B14",
               marginTop: "12px",
             }}
@@ -121,14 +121,19 @@ export default async function Image() {
                 justifyContent: "center",
                 background: "#0B0B14",
                 color: "#C6FF3D",
-                borderRadius: "12px",
-                padding: "4px 16px",
+                borderRadius: "14px",
+                padding: "6px 18px",
                 transform: "rotate(-6deg)",
+                border: "3px solid #0B0B14",
               }}
             >
               pd
             </div>
-            <span>PdfDrip</span>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span>Pdf</span>
+              <span style={{ color: "#6E3CF6" }}>Drip</span>
+              <span style={{ width: "8px", height: "8px", background: "#FF3D9A", borderRadius: "50%", marginLeft: "4px" }} />
+            </div>
           </div>
         </div>
       </div>

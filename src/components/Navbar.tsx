@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/src/components/ThemeToggle";
 import { PrivacyBanner } from "@/src/components/PrivacyBanner";
+import { PdfDripLogo } from "@/src/components/PdfDripLogo";
 
 type ToolItem = {
   name: string;
@@ -93,17 +94,12 @@ export const Navbar: React.FC = () => {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 cursor-pointer group"
           onClick={() => {
             setActiveDropdown(null);
             setIsMegaMenuOpen(false);
           }}
         >
-          <img
-            src="/pdfdrip-logo.png"
-            alt="PdfDrip Logo"
-            className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105"
-          />
+          <PdfDripLogo size="md" />
         </Link>
 
         {/* Divided Category Dropdown Menus (Desktop) */}
