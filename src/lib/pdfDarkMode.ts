@@ -130,11 +130,9 @@ export async function convertPdfToDarkMode(
   const { preset = "charcoal", scale = 2.0, onProgress } = options;
   const presetConfig = DARK_MODE_PRESETS[preset] || DARK_MODE_PRESETS.charcoal;
 
-  // 1. Dynamic import of pdfjs-dist
-  const pdfjsLib = await import("pdfjs-dist");
-  if (typeof window !== "undefined") {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-  }
+  // Dynamic import cached pdfjs-dist
+  const { getPdfjs } = await import("@/src/lib/pdfjs");
+  const pdfjsLib = await getPdfjs();
 
   const arrayBuffer = await file.arrayBuffer();
   const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });

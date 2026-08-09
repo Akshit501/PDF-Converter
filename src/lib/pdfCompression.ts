@@ -33,11 +33,9 @@ export async function compressPDF(
   const originalSize = file.size;
   const settings = COMPRESSION_SETTINGS[level];
 
-  // Dynamic import pdfjs-dist
-  const pdfjsLib = await import("pdfjs-dist");
-  if (typeof window !== "undefined") {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-  }
+  // Dynamic import cached pdfjs-dist
+  const { getPdfjs } = await import("@/src/lib/pdfjs");
+  const pdfjsLib = await getPdfjs();
 
   const arrayBuffer = await file.arrayBuffer();
   const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });

@@ -13,10 +13,8 @@ export async function extractTextFromPdf(
   file: File,
   onProgress?: (current: number, total: number) => void
 ): Promise<TextExtractionResult> {
-  const pdfjsLib = await import("pdfjs-dist");
-  if (typeof window !== "undefined") {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-  }
+  const { getPdfjs } = await import("@/src/lib/pdfjs");
+  const pdfjsLib = await getPdfjs();
 
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;

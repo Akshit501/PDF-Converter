@@ -37,10 +37,8 @@ export function formatFileSize(bytes: number): string {
 
 async function renderPdfThumbnail(file: File, pageNum: number = 1): Promise<string | undefined> {
   try {
-    const pdfjsLib = await import("pdfjs-dist");
-    if (typeof window !== "undefined") {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-    }
+    const { getPdfjs } = await import("@/src/lib/pdfjs");
+    const pdfjsLib = await getPdfjs();
 
     const arrayBuffer = await file.arrayBuffer();
     const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
@@ -49,7 +47,7 @@ async function renderPdfThumbnail(file: File, pageNum: number = 1): Promise<stri
     if (pageNum > pdf.numPages) return undefined;
     const page = await pdf.getPage(pageNum);
 
-    const viewport = page.getViewport({ scale: 0.3 });
+    const viewport = page.getViewport({ scale: 0.2 });
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
     if (!context) return undefined;

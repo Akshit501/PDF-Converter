@@ -20,10 +20,8 @@ export async function convertPdfToImages(
   quality: number = 0.92,
   onProgress?: (current: number, total: number) => void
 ): Promise<PdfToImagesResult> {
-  const pdfjsLib = await import("pdfjs-dist");
-  if (typeof window !== "undefined") {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-  }
+  const { getPdfjs } = await import("@/src/lib/pdfjs");
+  const pdfjsLib = await getPdfjs();
 
   const arrayBuffer = await file.arrayBuffer();
   const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
