@@ -23,7 +23,7 @@ export default function ProtectPdfPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F5F2FF] dark:bg-[#0B0B14] text-[#0B0B14] dark:text-white flex flex-col font-sans transition-colors">
+    <div className="min-h-screen bg-[#FDFBF7] dark:bg-[#09090B] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
       <Navbar />
 
       <main className="flex-1 max-w-[1180px] mx-auto w-full px-6 py-10 space-y-12">

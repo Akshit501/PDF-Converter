@@ -15,62 +15,62 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F2FF] dark:bg-[#0B0B14] text-[#0B0B14] dark:text-white flex flex-col font-sans transition-colors">
+    <div className="min-h-screen bg-[#FDFBF7] dark:bg-[#09090B] text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
       {/* 1. NAVBAR */}
       <Navbar />
 
       {/* 2. HERO */}
-      <header className="py-16 md:py-20 relative overflow-hidden">
-        <div className="max-w-[1180px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-center">
+      <header className="py-16 md:py-24 relative overflow-hidden">
+        <div className="max-w-[1240px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
           <div>
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 bg-[#C6FF3D] border-[3px] border-[#0B0B14] rounded-full px-3.5 py-1.5 font-mono-custom text-xs font-bold -rotate-2 mb-6 shadow-xs">
-              ⚡ GEN Z PDF CONVERTER | SECURE • NO DATA COLLECTED
+            {/* Eyebrow Badge */}
+            <div className="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 rounded-full px-4 py-1.5 font-mono-custom text-xs font-semibold mb-6 shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              100% IN-BROWSER · NO DATA STORED
             </div>
 
             {/* H1 Title */}
-            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-[64px] leading-[0.98] tracking-tight mb-6 text-[#0B0B14]">
-              turn any file into a{" "}
-              <span className="bg-[#6E3CF6] text-white px-2.5 py-0.5 inline-block -rotate-1 rounded-md">
-                PDF
-              </span>{" "}
-              in seconds.
+            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl leading-[1.05] tracking-tight mb-6 text-slate-900 dark:text-white">
+              Convert & Edit PDFs{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-500 dark:from-indigo-400 dark:to-cyan-400">
+                Instantly in Your Browser.
+              </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-lg leading-relaxed text-[#33314a] max-w-md mb-8">
-              drag it in, we crunch it, you download. word, excel, slides, jpgs — whatever's on your camera roll, PdfDrip handles it.
+            <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-300 max-w-lg mb-8 font-sans">
+              Merge, Split, Compress, Dark Mode & Convert Images to PDF. Zero server uploads — your files never leave your device.
             </p>
 
             {/* Hero CTAs */}
-            <div className="flex flex-wrap gap-3.5 mb-8">
+            <div className="flex flex-wrap gap-4 mb-8">
               <a
                 href="#workspace"
-                className="btn-brutal-purple px-7 py-4 text-base font-display font-bold"
+                className="btn-pro-primary font-display"
               >
-                start converting
+                Start Converting Now →
               </a>
               <a
                 href="#lineup"
-                className="px-7 py-4 rounded-xl border-[3px] border-[#0B0B14] bg-white text-[#0B0B14] font-display font-bold text-base hover:bg-[#F5F2FF] transition-colors inline-flex items-center justify-center"
+                className="btn-pro-secondary font-display"
               >
-                see all tools
+                Explore All Tools
               </a>
             </div>
 
             {/* Trust Strip */}
-            <div className="flex flex-wrap gap-4 items-center text-xs font-semibold text-[#4a475f]">
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.75 h-1.75 bg-[#6E3CF6] rounded-full inline-block" />
-                256-bit encrypted
+            <div className="flex flex-wrap gap-5 items-center text-xs font-medium text-slate-500 dark:text-slate-400">
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full inline-block" />
+                256-bit In-Memory Encryption
               </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.75 h-1.75 bg-[#6E3CF6] rounded-full inline-block" />
-                100% in-browser
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full inline-block" />
+                100% Client-Side Engine
               </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.75 h-1.75 bg-[#6E3CF6] rounded-full inline-block" />
-                no signup needed
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full inline-block" />
+                No Account Required
               </span>
             </div>
           </div>
@@ -85,18 +85,6 @@ export default function Home() {
           </div>
         </div>
       </header>
-
-      {/* 3. MARQUEE */}
-      <div className="border-t-[3px] border-b-[3px] border-[#0B0B14] bg-[#0B0B14] overflow-hidden py-3.5">
-        <div className="animate-marquee">
-          <span>
-            WORD → PDF ✦ PDF → WORD ✦ MERGE PDF ✦ SPLIT PDF ✦ DARK MODE ✦ COMPRESS PDF ✦ IMAGES → PDF ✦{" "}
-          </span>
-          <span>
-            WORD → PDF ✦ PDF → WORD ✦ MERGE PDF ✦ SPLIT PDF ✦ DARK MODE ✦ COMPRESS PDF ✦ IMAGES → PDF ✦{" "}
-          </span>
-        </div>
-      </div>
 
       {/* 4. HOW IT WORKS */}
       <section className="py-20">
@@ -201,44 +189,46 @@ export default function Home() {
       </section>
 
       {/* 6. PRODUCT FAMILY GRID (Linking to dedicated tool pages) */}
-      <section id="lineup" className="py-16 pt-0">
-        <div className="max-w-[1180px] mx-auto px-6">
-          <div className="max-w-[640px] mx-auto mb-13 text-center">
-            <span className="font-mono-custom text-xs font-semibold text-[#4B1FCB] uppercase tracking-widest inline-block mb-3">
-              // the lineup
+      <section id="lineup" className="py-20 bg-white/50 dark:bg-slate-900/30 border-t border-b border-slate-200/80 dark:border-slate-800/80">
+        <div className="max-w-[1240px] mx-auto px-6">
+          <div className="max-w-[640px] mx-auto mb-14 text-center">
+            <span className="font-mono-custom text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest inline-block mb-3">
+              // PRODUCT LINEUP
             </span>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#0B0B14] mb-2.5">
-              the full product family
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white mb-3">
+              The Full PDF Product Family
             </h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm">
+              All tools run 100% client-side in your browser with zero file uploads.
+            </p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
-              { name: "JPG to PDF", emoji: "🖼️", bg: "#C6FF3D", text: "#0B0B14", rot: "-rotate-[1.5deg]", href: "/jpg-to-pdf" },
-              { name: "Merge PDF", emoji: "🥞", bg: "#3B7DED", text: "#FFFFFF", rot: "rotate-[1deg]", href: "/merge-pdf" },
-              { name: "Split PDF", emoji: "✂️", bg: "#E8622A", text: "#FFFFFF", rot: "-rotate-[0.5deg]", href: "/split-pdf" },
-              { name: "Compress PDF", emoji: "📉", bg: "#4B1FCB", text: "#FFFFFF", rot: "-rotate-[1.5deg]", href: "/compress-pdf" },
-              { name: "PDF Dark Mode", emoji: "🌙", bg: "#0B0B14", text: "#C6FF3D", rot: "-rotate-[0.5deg]", href: "/dark-mode" },
-              { name: "PDF to Images", emoji: "📦", bg: "#1F9D55", text: "#FFFFFF", rot: "rotate-[1deg]", href: "/pdf-to-jpg" },
-              { name: "Reorder Pages", emoji: "📋", bg: "#FF3D9A", text: "#FFFFFF", rot: "rotate-[1deg]", href: "/page-manager" },
-              { name: "Add Watermark", emoji: "✍️", bg: "#6E3CF6", text: "#FFFFFF", rot: "-rotate-[0.5deg]", href: "/watermark" },
-              { name: "Extract Text", emoji: "📝", bg: "#3B7DED", text: "#FFFFFF", rot: "rotate-[1deg]", href: "/extract-text" },
-              { name: "Protect PDF", emoji: "🔒", bg: "#FF3D9A", text: "#FFFFFF", rot: "-rotate-[0.5deg]", href: "/protect-pdf" },
-              { name: "Word to PDF", emoji: "W", bg: "#3B7DED", text: "#FFFFFF", rot: "rotate-[1deg]", href: "/" },
-              { name: "Excel to PDF", emoji: "X", bg: "#1F9D55", text: "#FFFFFF", rot: "-rotate-[0.5deg]", href: "/" },
+              { name: "JPG to PDF", emoji: "🖼️", href: "/jpg-to-pdf" },
+              { name: "Merge PDF", emoji: "🥞", href: "/merge-pdf" },
+              { name: "Split PDF", emoji: "✂️", href: "/split-pdf" },
+              { name: "Compress PDF", emoji: "📉", href: "/compress-pdf" },
+              { name: "PDF Dark Mode", emoji: "🌙", href: "/dark-mode" },
+              { name: "PDF to Images", emoji: "📦", href: "/pdf-to-jpg" },
+              { name: "Reorder Pages", emoji: "📋", href: "/page-manager" },
+              { name: "Add Watermark", emoji: "✍️", href: "/watermark" },
+              { name: "Extract Text", emoji: "📝", href: "/extract-text" },
+              { name: "Protect PDF", emoji: "🔒", href: "/protect-pdf" },
+              { name: "Word to PDF", emoji: "📄", href: "/" },
+              { name: "Excel to PDF", emoji: "📊", href: "/" },
             ].map((item, idx) => (
               <Link
                 key={idx}
                 href={item.href}
-                className={`bg-white border-[3px] border-[#0B0B14] rounded-2xl p-5.5 text-center shadow-[4px_4px_0_#0B0B14] hover:translate-y-[-5px] hover:rotate-0 hover:shadow-[8px_8px_0_#0B0B14] transition-all cursor-pointer block ${item.rot}`}
+                className="bg-white dark:bg-[#141417] border border-slate-300 dark:border-slate-700 rounded-2xl p-5 text-center shadow-sm hover:shadow-xl hover:border-indigo-600 dark:hover:border-indigo-500 hover:-translate-y-1 transition-all cursor-pointer block group"
               >
-                <div
-                  style={{ backgroundColor: item.bg, color: item.text }}
-                  className="w-11 h-11 mx-auto mb-3 border-2 border-[#0B0B14] rounded-xl flex items-center justify-center font-display font-bold text-sm shadow-xs"
-                >
+                <div className="w-12 h-12 mx-auto mb-3.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60 rounded-xl flex items-center justify-center font-display font-bold text-lg group-hover:scale-110 transition-transform">
                   {item.emoji}
                 </div>
-                <p className="font-display font-semibold text-xs text-[#0B0B14]">{item.name}</p>
+                <p className="font-display font-semibold text-xs text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  {item.name}
+                </p>
               </Link>
             ))}
           </div>

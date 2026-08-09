@@ -14,36 +14,33 @@ export const PdfDripLogo: React.FC<LogoProps> = ({
   size = "md",
 }) => {
   const iconSizeClass =
-    size === "sm" ? "w-7 h-7" : size === "lg" ? "w-11 h-11" : "w-9 h-9";
+    size === "sm" ? "w-8 h-8" : size === "lg" ? "w-11 h-11" : "w-9.5 h-9.5";
   const textSizeClass =
     size === "sm" ? "text-xl" : size === "lg" ? "text-3xl" : "text-2xl";
 
   return (
-    <div className={`flex items-center gap-2.5 select-none ${className}`}>
-      {/* Liquid Drip Icon Badge */}
+    <div className={`flex items-center gap-3 select-none ${className}`}>
+      {/* Sleek Gradient Icon */}
       <div className="relative group cursor-pointer">
-        <div className={`${iconSizeClass} bg-[#0B0B14] text-[#C6FF3D] dark:bg-[#C6FF3D] dark:text-[#0B0B14] border-2 border-[#0B0B14] rounded-xl -rotate-6 group-hover:rotate-0 flex items-center justify-center font-display font-black shadow-[2px_2px_0_#6E3CF6] dark:shadow-[2px_2px_0_#C6FF3D] transition-transform duration-200`}>
+        <div className={`${iconSizeClass} bg-gradient-to-tr from-[#4F46E5] to-[#06B6D4] text-white rounded-xl flex items-center justify-center shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-all duration-200`}>
           <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-            {/* Custom PDF Document with Drip Effect */}
             <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
           </svg>
         </div>
-        {/* Animated Drip Droplet */}
-        <span className="absolute -bottom-1.5 right-0.5 w-2 h-2.5 bg-[#6E3CF6] dark:bg-[#C6FF3D] rounded-b-full rounded-t-xs" />
+        {/* Subtle Glow Accent */}
+        <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#10B981] rounded-full ring-2 ring-white dark:ring-slate-900" />
       </div>
 
       {!iconOnly && (
-        <div className="flex flex-col leading-none">
-          <div className={`font-display font-black ${textSizeClass} tracking-tight text-[#0B0B14] dark:text-white flex items-center gap-0.5`}>
+        <div className="flex flex-col leading-tight">
+          <div className={`font-display font-bold ${textSizeClass} tracking-tight text-slate-900 dark:text-white flex items-center`}>
             <span>Pdf</span>
-            <span className="text-[#6E3CF6] dark:text-[#C6FF3D] font-extrabold relative">
+            <span className="text-[#4F46E5] dark:text-[#818CF8] font-extrabold ml-0.5">
               Drip
-              {/* Pink Accent Drip Dot */}
-              <span className="inline-block w-2 h-2 bg-[#FF3D9A] rounded-full ml-0.5 animate-pulse" />
             </span>
           </div>
-          <span className="text-[9px] font-mono-custom font-bold text-[#54506a] dark:text-gray-400 uppercase tracking-widest mt-0.5">
-            // GEN Z PDF STUDIO
+          <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 tracking-wider uppercase">
+            Client-Side Studio
           </span>
         </div>
       )}

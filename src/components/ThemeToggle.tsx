@@ -11,7 +11,6 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = "" }
   useEffect(() => {
     setMounted(true);
     const storedTheme = localStorage.getItem("theme");
-    // Default to Light Mode unless explicitly set to dark in localStorage
     const initialDark = storedTheme === "dark";
 
     setIsDark(initialDark);
@@ -37,7 +36,7 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = "" }
 
   if (!mounted) {
     return (
-      <div className={`w-[72px] h-9 rounded-full bg-[#0B0B14] border-2 border-[#0B0B14] ${className}`} />
+      <div className={`w-16 h-8 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 ${className}`} />
     );
   }
 
@@ -46,30 +45,34 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = "" }
       type="button"
       onClick={toggleTheme}
       aria-label="Toggle dark mode theme"
-      className={`relative w-[76px] h-9 rounded-full p-1 border-2 border-[#0B0B14] transition-colors flex items-center justify-between cursor-pointer shadow-[2px_2px_0_#0B0B14] ${
-        isDark ? "bg-[#0B0B14]" : "bg-[#F5F2FF]"
+      className={`relative w-16 h-8 rounded-full p-1 border transition-colors flex items-center justify-between cursor-pointer ${
+        isDark
+          ? "bg-slate-900 border-slate-700"
+          : "bg-slate-100 border-slate-200"
       } ${className}`}
     >
-      {/* Sliding Pill Knob */}
+      {/* Track Icons */}
+      <div className="w-full flex items-center justify-between px-1 pointer-events-none text-xs">
+        <Sun className={`w-3.5 h-3.5 ${isDark ? "text-slate-400" : "opacity-0"}`} />
+        <Moon className={`w-3.5 h-3.5 ${!isDark ? "text-slate-400" : "opacity-0"}`} />
+      </div>
+
+      {/* Sliding Knob */}
       <motion.div
         layout
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        className={`absolute top-0.75 w-7 h-7 rounded-full border-2 border-[#0B0B14] flex items-center justify-center font-bold shadow-xs ${
-          isDark ? "left-[41px] bg-[#C6FF3D] text-[#0B0B14]" : "left-1 bg-[#6E3CF6] text-white"
+        className={`absolute top-0.5 w-6.5 h-6.5 rounded-full flex items-center justify-center shadow-sm transition-all ${
+          isDark
+            ? "right-0.5 bg-indigo-500 text-white"
+            : "left-0.5 bg-white text-amber-500 border border-slate-200"
         }`}
       >
         {isDark ? (
-          <Moon className="w-3.5 h-3.5 fill-[#0B0B14]" />
+          <Moon className="w-3.5 h-3.5 fill-current" />
         ) : (
-          <Sun className="w-3.5 h-3.5 fill-white" />
+          <Sun className="w-3.5 h-3.5 fill-current" />
         )}
       </motion.div>
-
-      {/* Track Icons */}
-      <div className="w-full flex items-center justify-between px-1.5 pointer-events-none text-xs">
-        <Sun className={`w-3.5 h-3.5 ${isDark ? "text-[#54506a]" : "opacity-0"}`} />
-        <Moon className={`w-3.5 h-3.5 ${!isDark ? "text-[#54506a]" : "opacity-0"}`} />
-      </div>
     </button>
   );
 };

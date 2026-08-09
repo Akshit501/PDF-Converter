@@ -247,20 +247,8 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
 
   return (
     <div className={`w-full max-w-xl mx-auto space-y-6 ${className}`}>
-      {/* HTML Screenshot Matched Dropzone Card */}
+      {/* Sleek Professional Dropzone Card */}
       <div className="relative">
-        {/* Rotated Stickers */}
-        <div className="absolute -top-5 -right-4 z-20 bg-[#C6FF3D] text-[#0B0B14] border-[3px] border-[#0B0B14] rounded-full w-20 h-20 flex flex-col items-center justify-center text-center font-mono-custom text-[11px] font-bold leading-tight rotate-[10deg] shadow-[4px_4px_0_#0B0B14]">
-          <span>100%</span>
-          <span>FREE</span>
-        </div>
-
-        <div className="absolute -bottom-4 -left-5 z-20 bg-[#6E3CF6] text-white border-[3px] border-[#0B0B14] rounded-full w-[68px] h-[68px] flex flex-col items-center justify-center text-center font-mono-custom text-[10px] font-bold leading-tight -rotate-[12deg] shadow-[4px_4px_0_#0B0B14]">
-          <span>no</span>
-          <span>watermark</span>
-        </div>
-
-        {/* Dropzone Container */}
         <label
           htmlFor={uniqueInputId}
           onDragOver={handleDragOver}
@@ -274,13 +262,12 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
               fileInputRef.current?.click();
             }
           }}
-          className={`relative block w-full bg-white border-[3px] border-[#0B0B14] rounded-[22px] p-8 sm:p-10 text-center transition-all duration-200 cursor-pointer outline-none touch-manipulation select-none rotate-[1.4deg] shadow-[12px_12px_0_#0B0B14] active:scale-[0.99] group ${
-            isDragging ? "bg-[#F5F2FF] scale-[1.01]" : "hover:bg-[#FAF8FF]"
+          className={`relative block w-full bg-white dark:bg-[#141417] border-2 border-dashed rounded-3xl p-8 sm:p-12 text-center transition-all duration-200 cursor-pointer outline-none touch-manipulation select-none shadow-xl shadow-slate-900/5 group ${
+            isDragging
+              ? "border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 scale-[1.01]"
+              : "border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-slate-50/80 dark:hover:bg-slate-900/50"
           }`}
         >
-          {/* Dashed Inset Ring */}
-          <div className="absolute inset-[10px] border-2 border-dashed border-[#0B0B14]/35 rounded-[14px] pointer-events-none" />
-
           <input
             id={uniqueInputId}
             ref={fileInputRef}
@@ -291,39 +278,40 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
             className="hidden"
           />
 
-          <div className="relative z-10 flex flex-col items-center justify-center space-y-4 py-3">
-            {/* Rotated Lime Drop Icon Box */}
-            <div className="w-16 h-16 bg-[#C6FF3D] border-[3px] border-[#0B0B14] rounded-2xl flex items-center justify-center text-2xl font-bold -rotate-8 shadow-xs group-hover:rotate-0 transition-transform">
+          <div className="relative z-10 flex flex-col items-center justify-center space-y-4 py-2">
+            {/* Sleek Gradient Icon Badge */}
+            <div className="w-16 h-16 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800/60 rounded-2xl flex items-center justify-center text-3xl font-bold group-hover:scale-105 transition-transform shadow-sm">
               📄
             </div>
 
             {/* Title & Sub */}
             <div className="space-y-1">
-              <h3 className="font-display font-bold text-xl sm:text-2xl text-[#0B0B14]">
-                drop your file here
+              <h3 className="font-display font-bold text-xl sm:text-2xl text-slate-900 dark:text-white">
+                Drag & Drop PDF Files Here
               </h3>
-              <p className="text-sm text-[#5a5770] font-sans">
-                or tap below to browse
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-sans">
+                or click below to browse files from your device
               </p>
             </div>
 
-            {/* Neo-Brutalist Action Button */}
-            <div className="w-full pt-2">
-              <span className="block w-full bg-[#0B0B14] text-[#C6FF3D] border-[3px] border-[#0B0B14] rounded-xl py-3.5 px-6 font-display font-bold text-base shadow-[4px_4px_0_#0B0B14] group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[6px_6px_0_#0B0B14] transition-all">
-                + choose file
+            {/* Professional Primary Action Button */}
+            <div className="w-full max-w-xs pt-2">
+              <span className="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-display font-semibold text-base py-3.5 px-6 rounded-xl shadow-md shadow-indigo-500/20 group-hover:scale-[1.02] transition-all">
+                + Choose PDF Files
               </span>
             </div>
 
-            {/* Format Chips */}
-            <div className="flex flex-wrap justify-center gap-2 pt-2">
-              {[".docx", ".xlsx", ".pptx", ".jpg", ".png"].map((fmt, idx) => (
-                <span
-                  key={idx}
-                  className="font-mono-custom text-xs font-semibold border-2 border-[#0B0B14] rounded-full px-2.5 py-1 bg-white text-[#0B0B14]"
-                >
-                  {fmt}
-                </span>
-              ))}
+            {/* Trust Badges */}
+            <div className="flex flex-wrap justify-center gap-2 pt-3 text-xs text-slate-500 dark:text-slate-400">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full font-medium">
+                🔒 100% In-Browser
+              </span>
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full font-medium">
+                ⚡ Max {maxSizeMB}MB
+              </span>
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full font-medium">
+                ✨ Zero Storage
+              </span>
             </div>
           </div>
         </label>
